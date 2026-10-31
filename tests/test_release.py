@@ -13,9 +13,13 @@ GUARD: Final = runpy.run_path(str(SCRIPTS / "check_release.py"), run_name="guard
 WORKFLOW: Final = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
 
 
-def tree(tmp_path: Path, project: str, module: str) -> Path:
+def tree(tmp_path: Path, project: str, module: str, changelog: str = "## [0.4.0] - 2026-10-31") -> Path:
     (tmp_path / "src" / "slen").mkdir(parents=True)
     (tmp_path / "pyproject.toml").write_text(f'[project]\nname = "slen"\nversion = "{project}"\n', encoding="utf-8")
+    link = "[0.4.0]: https://github.com/Alexey-Shpilka/slen-python/releases/tag/v0.4.0"
+    (tmp_path / "CHANGELOG.md").write_text(
+        f"# Changelog\n\n## [Unreleased]\n\n{changelog}\n\n{link}\n", encoding="utf-8"
+    )
     (tmp_path / "src" / "slen" / "_version.py").write_text(
         f'from typing import Final\n\n__version__: Final = "{module}"\n', encoding="utf-8"
     )
@@ -32,7 +36,7 @@ def test_the_tag_of_this_tree_is_its_version() -> None:
     ("tag", "project", "module", "refused"),
     [
         ("v0.4.0", "0.4.0", "0.4.0", 0),
-        ("v0.4.1", "0.4.0", "0.4.0", 2),
+        ("v0.4.1", "0.4.0", "0.4.0", 4),
         ("v0.4.0", "0.4.1", "0.4.0", 1),
         ("v0.4.0", "0.4.0", "0.4.1", 1),
         ("0.4.0", "0.4.0", "0.4.0", 2),
@@ -42,6 +46,32 @@ def test_a_tag_that_is_not_the_version_of_both_files_is_refused(
     tmp_path: Path, tag: str, project: str, module: str, refused: int
 ) -> None:
     assert len(GUARD["problems"](tag, tree(tmp_path, project, module))) == refused
+
+
+@pytest.mark.parametrize(
+    ("changelog", "refused"),
+    [
+        ("## [0.4.0] - 2026-10-31", 0),
+        ("## [Unreleased]", 1),
+        ("## [0.4.0]", 1),
+        ("## [0.4.0] - soon", 1),
+        ("## [0.4.0] - 2026-10-31 (yanked)", 1),
+    ],
+)
+def test_a_tag_whose_version_has_no_dated_section_in_the_changelog_is_refused(
+    tmp_path: Path, changelog: str, refused: int
+) -> None:
+    assert len(GUARD["problems"]("v0.4.0", tree(tmp_path, "0.4.0", "0.4.0", changelog))) == refused
+
+
+def test_a_section_without_its_link_is_refused(tmp_path: Path) -> None:
+    root = tree(tmp_path, "0.4.0", "0.4.0")
+    changelog = root / "CHANGELOG.md"
+    changelog.write_text(
+        changelog.read_text(encoding="utf-8").replace("[0.4.0]: https", "[0.3.0]: https"), encoding="utf-8"
+    )
+
+    assert GUARD["problems"]("v0.4.0", root) == ["CHANGELOG.md has no link [0.4.0]: at its bottom"]
 
 
 def test_the_guard_wants_one_tag() -> None:

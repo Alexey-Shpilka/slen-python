@@ -6,8 +6,6 @@
 - **One dependency**, [httpx](https://www.python-httpx.org/). OpenTelemetry is an extra, `slen[otel]`.
 - Answers are frozen dataclasses with the wire's field names (`execution_id`, `error_code`); statuses are `StrEnum`s, times `datetime`s with their offset, money and credits decimal strings — never floats. Typed (`py.typed`), checked with mypy `--strict` and pyright strict.
 
-> Not published yet: the package goes to PyPI with the first release.
-
 ## Install
 
 ```bash
