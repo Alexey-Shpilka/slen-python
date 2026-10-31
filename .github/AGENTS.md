@@ -7,7 +7,7 @@ The CI and the release of `slen`. No job reads a secret: a pull request from a f
 | File | Description |
 |------|-------------|
 | `workflows/ci.yml` | `python` (3.11, 3.12, 3.13, 3.14: `uv sync --locked`, ruff check and format, mypy and mypy on each example, pyright, pytest, the help slice `--check`), `python-lowest` (3.11 with every direct dependency at its lowest, the check that httpx 0.27 is what got installed, pytest, then the wheel installed in place of the source and `scripts/floor.py`), `python-consumer` (the build, `twine check --strict`, `scripts/check_dist.py`, `scripts/consumer.py`), `python-newest` (weekly and by hand: every dependency at its newest, pytest); also `workflow_call`, for the release |
-| `workflows/release.yml` | on a pushed tag `v*`: `gates` (`ci.yml`, called) on the tag's commit; `build` — the tag checked against `master` and the version, the wheel and the sdist built once and checked, kept as an artifact; `publish` — those files to PyPI by trusted publishing |
+| `workflows/release.yml` | on a pushed tag `v*`: `gates` (`ci.yml`, called) on the tag's commit; `build` — the tag checked against `master`, the version and its dated section of `CHANGELOG.md`, the wheel and the sdist built once and checked, kept as an artifact; `publish` — those files to PyPI by trusted publishing |
 | `dependabot.yml` | weekly: the pinned actions, and the tools of `uv.lock`; minors and patches in one PR per ecosystem, the majors of `httpx`, `pytest`, `mypy` and `pyright` ignored — they change what the suite holds, so they are taken by hand, in a change of their own |
 
 ## For AI Agents
