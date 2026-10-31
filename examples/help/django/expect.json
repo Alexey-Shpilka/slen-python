@@ -1,0 +1,16 @@
+{
+  "calls": [
+    {
+      "method": "POST",
+      "path": "/v1/operations/execute",
+      "headers": { "Idempotency-Key": "order-42:email" },
+      "body": {
+        "operation": "generate_email",
+        "input": { "messages": [{ "role": "user", "content": "Write a short email: order 42 has shipped." }] },
+        "execution_mode": "async"
+      }
+    },
+    { "method": "GET", "path": "/v1/executions/74438200973594750/status" }
+  ],
+  "prints": []
+}

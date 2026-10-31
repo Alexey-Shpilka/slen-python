@@ -1,0 +1,125 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "slen"
+version = "0.4.0"
+description = "Slen Python SDK — run flows and read their outcome, manage end customers and their credits, verify webhooks."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Alexey Shpilka" }]
+keywords = ["slen", "llm", "flows", "credits", "webhooks", "opentelemetry"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Framework :: AsyncIO",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = ["httpx>=0.27,<1"]
+
+[project.optional-dependencies]
+otel = ["opentelemetry-api>=1.27"]
+
+[project.urls]
+Homepage = "https://slen.ai"
+Documentation = "https://slen.ai/en/docs/sdk/overview"
+Repository = "https://github.com/Alexey-Shpilka/slen-python"
+Issues = "https://github.com/Alexey-Shpilka/slen-python/issues"
+Changelog = "https://github.com/Alexey-Shpilka/slen-python/blob/master/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+  "pytest==9.2.0",
+  "pytest-asyncio==1.4.1",
+  "mypy==2.4.1",
+  "pyright[nodejs]==1.1.414",
+  "ruff==0.17.3",
+  "pyyaml==6.0.3",
+  "types-pyyaml==6.0.12.20261030",
+  "fastapi==0.162.0",
+  "django>=5.2,<7",
+  "django-stubs==6.1.2",
+  "opentelemetry-sdk==1.45.2",
+  "twine==7.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/slen"]
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src", "pyproject.toml", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "PL", "N", "A", "S", "T20", "PT", "ANN", "ERA"]
+ignore = [
+  # Three positional parameters is the house rule; the keyword options of a public call are its written exception.
+  # tests/test_source_hygiene.py holds the rule itself, the way ruff cannot.
+  "PLR0913",
+  "PLR0917",
+  # A guard clause returns early: the house style, which a count of returns would punish.
+  "PLR0911",
+  # HTTP statuses read as themselves (429, 503, 204); a constant named after each would say less.
+  "PLR2004",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# The contract names two errors as Python names two builtins (TimeoutError, ConnectionError); each extends the builtin.
+"src/**" = ["A004"]
+"src/slen/_errors.py" = ["A001"]
+"tests/**" = ["S101", "ANN401", "S105", "S106", "A004"]
+# An example imports what a region needs in that region, and its markers read as comments of code.
+"examples/**" = ["T201", "INP001", "S105", "E402", "ERA001", "ANN401"]
+# A script of the repository prints what it does, and floor.py checks with assert.
+"scripts/**" = ["T201", "S603", "S607", "S101", "PT018"]
+
+[tool.ruff.lint.flake8-builtins]
+# The wire's and the contract's own names: `id`, `type`, `input`, `list`, `credits`.
+builtins-ignorelist = ["id", "type", "input", "list", "credits"]
+
+[tool.ruff.format]
+quote-style = "double"
+# An example is copied into the docs region by region: the formatter would end a region with blank lines.
+exclude = ["examples/**"]
+
+[tool.mypy]
+strict = true
+python_version = "3.11"
+files = ["src", "tests", "scripts"]
+mypy_path = "src:tests"
+warn_unreachable = true
+
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.11"
+include = ["src", "tests", "scripts", "examples"]
+extraPaths = ["tests"]
+# The SDK checks at run time what a caller without a type checker may pass; to pyright such a check is redundant.
+reportUnnecessaryIsInstance = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+addopts = ["--strict-markers", "--strict-config", "-ra"]
+xfail_strict = true
+filterwarnings = [
+  "error",
+  # Starlette's test client asks for its own fork of httpx; the one the SDK runs on serves it as it is.
+  "ignore:Using .httpx. with .starlette.testclient. is deprecated",
+]

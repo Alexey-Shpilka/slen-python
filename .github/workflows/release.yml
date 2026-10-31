@@ -1,0 +1,60 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions: { contents: read }
+# One release at a time, and a running one is never cancelled: the next tag waits.
+concurrency: { group: release, cancel-in-progress: false }
+# The Python of setup-python, never one uv downloads.
+env: { UV_PYTHON_DOWNLOADS: never }
+
+# A pushed tag vX.Y.Z is the release: the gates of ci.yml run on its commit, `build` makes the wheel and the sdist
+# once, behind the guards, and `publish` puts exactly those files on PyPI by trusted publishing (OIDC), with
+# attestations. No job reads a secret, and only `publish` can mint an OIDC token. See .github/AGENTS.md.
+
+jobs:
+  gates:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    name: build
+    needs: gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: { contents: read }
+    steps:
+      # All history: the next step reads master.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false, fetch-depth: 0 }
+      - name: the tag is on master
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/master; then
+            echo "::error::the tagged commit $GITHUB_SHA is not on master"
+            exit 1
+          fi
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: '3.13' }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: '0.13.6', enable-cache: false }
+      - name: the tag is the version of pyproject.toml and of slen.__version__
+        env: { TAG: '${{ github.ref_name }}' }
+        run: python scripts/check_release.py "$TAG"
+      - run: uv build -o dist
+      - run: uv sync --locked --only-group dev --no-install-project
+      - run: uv run --no-sync twine check --strict dist/*
+      - run: uv run --no-sync python scripts/check_dist.py dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with: { name: dist, path: dist/, if-no-files-found: error, retention-days: 7 }
+
+  publish:
+    name: pypi publish
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: { name: pypi, url: 'https://pypi.org/p/slen' }
+    permissions: { id-token: write }
+    steps:
+      # No checkout: no code of the repository runs beside the token, only the files `build` made.
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with: { name: dist, path: dist/ }
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3

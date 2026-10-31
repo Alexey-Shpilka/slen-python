@@ -1,0 +1,4752 @@
+{
+  "schema": 2,
+  "language": "python",
+  "package": {
+    "name": "slen",
+    "version": "0.4.0",
+    "manifest": "pyproject.toml",
+    "runtime": {
+      "name": "python",
+      "constraint": ">=3.11"
+    },
+    "dependencies": [
+      {
+        "name": "httpx",
+        "constraint": ">=0.27,<1",
+        "optional": false,
+        "extra": null
+      },
+      {
+        "name": "opentelemetry-api",
+        "constraint": ">=1.27",
+        "optional": true,
+        "extra": "otel"
+      }
+    ]
+  },
+  "client": {
+    "class": "Slen",
+    "options": "Slen"
+  },
+  "options": [
+    {
+      "name": "api_key",
+      "type": "str | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [
+        "SLEN_API_KEY"
+      ],
+      "description": null
+    },
+    {
+      "name": "timeout",
+      "type": "float",
+      "required": false,
+      "default": {
+        "code": "65.0",
+        "value": 65.0
+      },
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "connect_timeout",
+      "type": "float",
+      "required": false,
+      "default": {
+        "code": "5.0",
+        "value": 5.0
+      },
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "retries",
+      "type": "int",
+      "required": false,
+      "default": {
+        "code": "2",
+        "value": 2
+      },
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "logger",
+      "type": "SlenLogger | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "span_recorder",
+      "type": "SpanRecorder | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "webhook_secret",
+      "type": "str | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "webhook_tolerance_seconds",
+      "type": "int",
+      "required": false,
+      "default": {
+        "code": "300",
+        "value": 300
+      },
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "http_client",
+      "type": "httpx.Client | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "headers",
+      "type": "Mapping[str, str] | None",
+      "required": false,
+      "default": null,
+      "default_known": true,
+      "env": [],
+      "description": null
+    },
+    {
+      "name": "base_url",
+      "type": "str",
+      "required": false,
+      "default": {
+        "code": "DEFAULT_BASE_URL",
+        "value": "https://api.slen.ai"
+      },
+      "default_known": true,
+      "env": [],
+      "description": null
+    }
+  ],
+  "config_file": null,
+  "calls": [
+    {
+      "name": "close",
+      "symbol": "Slen",
+      "member": "close",
+      "deprecated": false,
+      "internal": false,
+      "signature": "close() -> None",
+      "operation": null
+    },
+    {
+      "name": "customers.adjust",
+      "symbol": "Customers",
+      "member": "adjust",
+      "deprecated": false,
+      "internal": false,
+      "signature": "adjust(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount",
+      "operation": "POST /v1/customers/{externalUserId}/adjust"
+    },
+    {
+      "name": "customers.block",
+      "symbol": "Customers",
+      "member": "block",
+      "deprecated": false,
+      "internal": false,
+      "signature": "block(external_user_id: str, *, reason: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer",
+      "operation": "POST /v1/customers/{externalUserId}/block"
+    },
+    {
+      "name": "customers.charge",
+      "symbol": "Customers",
+      "member": "charge",
+      "deprecated": false,
+      "internal": false,
+      "signature": "charge(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount",
+      "operation": "POST /v1/customers/{externalUserId}/charge"
+    },
+    {
+      "name": "customers.create",
+      "symbol": "Customers",
+      "member": "create",
+      "deprecated": false,
+      "internal": false,
+      "signature": "create(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer",
+      "operation": "PUT /v1/customers/{externalUserId}"
+    },
+    {
+      "name": "customers.delete",
+      "symbol": "Customers",
+      "member": "delete",
+      "deprecated": false,
+      "internal": false,
+      "signature": "delete(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> None",
+      "operation": "DELETE /v1/customers/{externalUserId}"
+    },
+    {
+      "name": "customers.entries",
+      "symbol": "Customers",
+      "member": "entries",
+      "deprecated": false,
+      "internal": false,
+      "signature": "entries(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[CreditEntry]",
+      "operation": "GET /v1/customers/{externalUserId}/entries"
+    },
+    {
+      "name": "customers.entriesAll",
+      "symbol": "Customers",
+      "member": "entries_all",
+      "deprecated": false,
+      "internal": false,
+      "signature": "entries_all(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None) -> Iterator[CreditEntry]",
+      "operation": "GET /v1/customers/{externalUserId}/entries"
+    },
+    {
+      "name": "customers.get",
+      "symbol": "Customers",
+      "member": "get",
+      "deprecated": false,
+      "internal": false,
+      "signature": "get(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer",
+      "operation": "GET /v1/customers/{externalUserId}"
+    },
+    {
+      "name": "customers.list",
+      "symbol": "Customers",
+      "member": "list",
+      "deprecated": false,
+      "internal": false,
+      "signature": "list(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[Customer]",
+      "operation": "GET /v1/customers"
+    },
+    {
+      "name": "customers.listAll",
+      "symbol": "Customers",
+      "member": "list_all",
+      "deprecated": false,
+      "internal": false,
+      "signature": "list_all(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None) -> Iterator[Customer]",
+      "operation": "GET /v1/customers"
+    },
+    {
+      "name": "customers.prices",
+      "symbol": "Customers",
+      "member": "prices",
+      "deprecated": false,
+      "internal": false,
+      "signature": "prices(*, operation_code: str | None = None, credit_type: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CreditPriceList",
+      "operation": "GET /v1/credit-prices"
+    },
+    {
+      "name": "customers.topUp",
+      "symbol": "Customers",
+      "member": "top_up",
+      "deprecated": false,
+      "internal": false,
+      "signature": "top_up(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount",
+      "operation": "POST /v1/customers/{externalUserId}/topup"
+    },
+    {
+      "name": "customers.unblock",
+      "symbol": "Customers",
+      "member": "unblock",
+      "deprecated": false,
+      "internal": false,
+      "signature": "unblock(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer",
+      "operation": "POST /v1/customers/{externalUserId}/unblock"
+    },
+    {
+      "name": "customers.updateAccount",
+      "symbol": "Customers",
+      "member": "update_account",
+      "deprecated": false,
+      "internal": false,
+      "signature": "update_account(external_user_id: str, credit_type: str, *, allow_negative: bool = False, low_balance_threshold: str = '0', timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount",
+      "operation": "PUT /v1/customers/{externalUserId}/accounts/{creditType}"
+    },
+    {
+      "name": "executions.get",
+      "symbol": "Executions",
+      "member": "get",
+      "deprecated": false,
+      "internal": false,
+      "signature": "get(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionStatusView",
+      "operation": "GET /v1/executions/{id}/status"
+    },
+    {
+      "name": "executions.trace",
+      "symbol": "Executions",
+      "member": "trace",
+      "deprecated": false,
+      "internal": false,
+      "signature": "trace(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionTrace",
+      "operation": "GET /v1/executions/{id}"
+    },
+    {
+      "name": "executions.wait",
+      "symbol": "Executions",
+      "member": "wait",
+      "deprecated": false,
+      "internal": false,
+      "signature": "wait(execution_id: str, *, timeout_seconds: float = 300, on_poll_error: PollErrorListener | None = None) -> ExecutionStatusView",
+      "operation": "GET /v1/executions/{id}/status"
+    },
+    {
+      "name": "health",
+      "symbol": "Slen",
+      "member": "health",
+      "deprecated": false,
+      "internal": false,
+      "signature": "health(*, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Health",
+      "operation": "GET /health"
+    },
+    {
+      "name": "operations.execute",
+      "symbol": "Operations",
+      "member": "execute",
+      "deprecated": false,
+      "internal": false,
+      "signature": "execute(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult",
+      "operation": "POST /v1/operations/execute"
+    },
+    {
+      "name": "operations.executeAsync",
+      "symbol": "Operations",
+      "member": "execute_async",
+      "deprecated": false,
+      "internal": false,
+      "signature": "execute_async(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult",
+      "operation": "POST /v1/operations/execute"
+    },
+    {
+      "name": "webhooks.constructEvent",
+      "symbol": "Webhooks",
+      "member": "construct_event",
+      "deprecated": false,
+      "internal": false,
+      "signature": "construct_event(payload: WebhookPayload, signature_header: str | None, *, secret: str | None = None, tolerance_seconds: int | None = None, now: datetime | None = None) -> WebhookEvent",
+      "operation": null
+    },
+    {
+      "name": "webhooks.verify",
+      "symbol": "Webhooks",
+      "member": "verify",
+      "deprecated": false,
+      "internal": false,
+      "signature": "verify(payload: WebhookPayload, signature_header: str | None, *, secret: str | None = None, tolerance_seconds: int | None = None, now: datetime | None = None) -> bool",
+      "operation": null
+    }
+  ],
+  "symbols": [
+    {
+      "name": "ApprovalDecidedEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [
+        "WebhookEvent"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: ApprovalDecidedEventData"
+        }
+      ]
+    },
+    {
+      "name": "ApprovalDecidedEventData",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "approval_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "approval_id: str"
+        },
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "flow_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_id: str"
+        },
+        {
+          "name": "node_key",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_key: str"
+        },
+        {
+          "name": "operation_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation_code: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: Literal['approved', 'rejected', 'expired']"
+        },
+        {
+          "name": "reason",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "reason: str | None"
+        },
+        {
+          "name": "decided_by",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "decided_by: str | None"
+        },
+        {
+          "name": "decided_by_user_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "decided_by_user_id: str | None"
+        },
+        {
+          "name": "decided_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "decided_at: datetime | None"
+        }
+      ]
+    },
+    {
+      "name": "ApprovalRequestedEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [
+        "WebhookEvent"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: ApprovalRequestedEventData"
+        }
+      ]
+    },
+    {
+      "name": "ApprovalRequestedEventData",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "approval_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "approval_id: str"
+        },
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "flow_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_id: str"
+        },
+        {
+          "name": "node_key",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_key: str"
+        },
+        {
+          "name": "operation_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation_code: str"
+        },
+        {
+          "name": "note",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "note: str | None"
+        },
+        {
+          "name": "expires_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "expires_at: datetime"
+        }
+      ]
+    },
+    {
+      "name": "AsyncCustomers",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_async.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: AsyncContext) -> None"
+        },
+        {
+          "name": "list",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async list(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[Customer]"
+        },
+        {
+          "name": "list_all",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "list_all(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None) -> AsyncIterator[Customer]"
+        },
+        {
+          "name": "get",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async get(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "create",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async create(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "update_account",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async update_account(external_user_id: str, credit_type: str, *, allow_negative: bool = False, low_balance_threshold: str = '0', timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "block",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async block(external_user_id: str, *, reason: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "unblock",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async unblock(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "delete",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async delete(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> None"
+        },
+        {
+          "name": "top_up",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async top_up(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "charge",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async charge(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "adjust",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async adjust(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "entries",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async entries(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[CreditEntry]"
+        },
+        {
+          "name": "entries_all",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "entries_all(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None) -> AsyncIterator[CreditEntry]"
+        },
+        {
+          "name": "prices",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async prices(*, operation_code: str | None = None, credit_type: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CreditPriceList"
+        }
+      ]
+    },
+    {
+      "name": "AsyncExecutions",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_async.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: AsyncContext) -> None"
+        },
+        {
+          "name": "get",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async get(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionStatusView"
+        },
+        {
+          "name": "wait",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async wait(execution_id: str, *, timeout_seconds: float = 300, on_poll_error: AsyncPollErrorListener | None = None) -> ExecutionStatusView"
+        },
+        {
+          "name": "trace",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async trace(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionTrace"
+        }
+      ]
+    },
+    {
+      "name": "AsyncOperations",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/operations/_async.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: AsyncContext) -> None"
+        },
+        {
+          "name": "execute",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async execute(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult"
+        },
+        {
+          "name": "execute_async",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async execute_async(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult"
+        }
+      ]
+    },
+    {
+      "name": "AsyncPollErrorListener",
+      "module": "slen",
+      "kind": "type",
+      "source": "src/slen/_modules/executions/_wait.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "AsyncPollErrorListener: TypeAlias = Callable[[SlenError, int], Awaitable[None] | None]",
+      "members": []
+    },
+    {
+      "name": "AsyncSlen",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_client.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "operations",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operations: AsyncOperations"
+        },
+        {
+          "name": "executions",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "executions: AsyncExecutions"
+        },
+        {
+          "name": "customers",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customers: AsyncCustomers"
+        },
+        {
+          "name": "webhooks",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "webhooks: Webhooks"
+        },
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(*, api_key: str | None = None, timeout: float = 65.0, connect_timeout: float = 5.0, retries: int = 2, logger: SlenLogger | None = None, span_recorder: SpanRecorder | None = None, webhook_secret: str | None = None, webhook_tolerance_seconds: int = 300, http_client: httpx.AsyncClient | None = None, headers: Mapping[str, str] | None = None, base_url: str = DEFAULT_BASE_URL) -> None"
+        },
+        {
+          "name": "with_logger",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "with_logger(logger: SlenLogger) -> 'AsyncSlen'"
+        },
+        {
+          "name": "health",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async health(*, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Health"
+        },
+        {
+          "name": "close",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async close() -> None"
+        }
+      ]
+    },
+    {
+      "name": "AttemptSummary",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "attempt_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "attempt_id: str"
+        },
+        {
+          "name": "attempt_number",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "attempt_number: int"
+        },
+        {
+          "name": "connection_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "connection_id: str"
+        },
+        {
+          "name": "pool_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "pool_id: str | None"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: str"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        },
+        {
+          "name": "latency_ms",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "latency_ms: int | None"
+        },
+        {
+          "name": "cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost: str | None"
+        },
+        {
+          "name": "provider_request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "provider_request_id: str | None"
+        },
+        {
+          "name": "model_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "model_code: str | None"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticationError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "BudgetExceededError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "ConcurrencyLimitError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "ConnectionError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError",
+        "builtins.ConnectionError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "ContextValue",
+      "module": "slen",
+      "kind": "type",
+      "source": "src/slen/_modules/operations/_calls.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "ContextValue: TypeAlias = str | int | float | bool | None",
+      "members": []
+    },
+    {
+      "name": "CreditEntry",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "entry_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "entry_id: str"
+        },
+        {
+          "name": "customer_account_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customer_account_id: str"
+        },
+        {
+          "name": "external_user_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "external_user_id: str"
+        },
+        {
+          "name": "credit_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credit_type: str"
+        },
+        {
+          "name": "entry_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "entry_type: CreditEntryType"
+        },
+        {
+          "name": "credits",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credits: str"
+        },
+        {
+          "name": "balance_after",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "balance_after: str"
+        },
+        {
+          "name": "available_after",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "available_after: str"
+        },
+        {
+          "name": "reservation_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "reservation_id: str | None"
+        },
+        {
+          "name": "note",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "note: str | None"
+        },
+        {
+          "name": "created_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "created_at: datetime"
+        }
+      ]
+    },
+    {
+      "name": "CreditEntryType",
+      "module": "slen",
+      "kind": "enum",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "StrEnum"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "HOLD",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "HOLD = 'hold'"
+        },
+        {
+          "name": "COMMIT",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "COMMIT = 'commit'"
+        },
+        {
+          "name": "RELEASE",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RELEASE = 'release'"
+        },
+        {
+          "name": "TOPUP",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "TOPUP = 'topup'"
+        },
+        {
+          "name": "ADJUST",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "ADJUST = 'adjust'"
+        },
+        {
+          "name": "CHARGE",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "CHARGE = 'charge'"
+        }
+      ]
+    },
+    {
+      "name": "CreditPrice",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "credit_price_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credit_price_id: str"
+        },
+        {
+          "name": "project_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "project_id: str"
+        },
+        {
+          "name": "operation_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation_code: str"
+        },
+        {
+          "name": "credit_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credit_type: str"
+        },
+        {
+          "name": "credits",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credits: str"
+        },
+        {
+          "name": "created_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "created_at: datetime"
+        },
+        {
+          "name": "updated_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "updated_at: datetime"
+        }
+      ]
+    },
+    {
+      "name": "CreditPriceList",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: tuple[CreditPrice, ...]"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "customer_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customer_id: str"
+        },
+        {
+          "name": "external_user_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "external_user_id: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: CustomerStatus"
+        },
+        {
+          "name": "blocked_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "blocked_at: datetime | None"
+        },
+        {
+          "name": "block_reason",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "block_reason: str | None"
+        },
+        {
+          "name": "accounts",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "accounts: tuple[CustomerAccount, ...]"
+        },
+        {
+          "name": "created_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "created_at: datetime"
+        },
+        {
+          "name": "updated_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "updated_at: datetime"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        },
+        {
+          "name": "account",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "account(credit_type: str = 'default') -> CustomerAccount | None"
+        },
+        {
+          "name": "is_blocked",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_blocked() -> bool"
+        }
+      ]
+    },
+    {
+      "name": "CustomerAccount",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "customer_account_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customer_account_id: str"
+        },
+        {
+          "name": "customer_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customer_id: str"
+        },
+        {
+          "name": "project_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "project_id: str"
+        },
+        {
+          "name": "external_user_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "external_user_id: str"
+        },
+        {
+          "name": "credit_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credit_type: str"
+        },
+        {
+          "name": "balance",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "balance: str"
+        },
+        {
+          "name": "reserved",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "reserved: str"
+        },
+        {
+          "name": "available",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "available: str"
+        },
+        {
+          "name": "allow_negative",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "allow_negative: bool"
+        },
+        {
+          "name": "low_balance_threshold",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "low_balance_threshold: str"
+        },
+        {
+          "name": "created_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "created_at: datetime"
+        },
+        {
+          "name": "updated_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "updated_at: datetime"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "CustomerBalanceLowEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [
+        "WebhookEvent"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: CustomerBalanceLowEventData"
+        }
+      ]
+    },
+    {
+      "name": "CustomerBalanceLowEventData",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "customer_account_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customer_account_id: str"
+        },
+        {
+          "name": "project_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "project_id: str"
+        },
+        {
+          "name": "external_user_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "external_user_id: str"
+        },
+        {
+          "name": "credit_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "credit_type: str"
+        },
+        {
+          "name": "balance",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "balance: str"
+        },
+        {
+          "name": "reserved",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "reserved: str"
+        },
+        {
+          "name": "available",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "available: str"
+        },
+        {
+          "name": "threshold",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "threshold: str"
+        }
+      ]
+    },
+    {
+      "name": "CustomerBlockedError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "PolicyDeniedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "CustomerNotFoundError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "CustomerStatus",
+      "module": "slen",
+      "kind": "enum",
+      "source": "src/slen/_modules/customers/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "StrEnum"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "ACTIVE",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "ACTIVE = 'active'"
+        },
+        {
+          "name": "BLOCKED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "BLOCKED = 'blocked'"
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/customers/_sync.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: SyncContext) -> None"
+        },
+        {
+          "name": "list",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "list(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[Customer]"
+        },
+        {
+          "name": "list_all",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "list_all(*, cursor: str | None = None, limit: int = 50, search: str | None = None, status: CustomerStatus | None = None, credit_type: str | None = None, low_balance: str | None = None, timeout: float | None = None, retries: int | None = None) -> Iterator[Customer]"
+        },
+        {
+          "name": "get",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "get(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "create",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "create(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "update_account",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "update_account(external_user_id: str, credit_type: str, *, allow_negative: bool = False, low_balance_threshold: str = '0', timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "block",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "block(external_user_id: str, *, reason: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "unblock",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "unblock(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Customer"
+        },
+        {
+          "name": "delete",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "delete(external_user_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> None"
+        },
+        {
+          "name": "top_up",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "top_up(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "charge",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "charge(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "adjust",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "adjust(external_user_id: str, credits: str, *, credit_type: str = 'default', note: str | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CustomerAccount"
+        },
+        {
+          "name": "entries",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "entries(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Page[CreditEntry]"
+        },
+        {
+          "name": "entries_all",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "entries_all(external_user_id: str, *, cursor: str | None = None, limit: int = 50, credit_type: str | None = None, entry_type: CreditEntryType | None = None, timeout: float | None = None, retries: int | None = None) -> Iterator[CreditEntry]"
+        },
+        {
+          "name": "prices",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "prices(*, operation_code: str | None = None, credit_type: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> CreditPriceList"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionCache",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "hit",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "hit: bool"
+        },
+        {
+          "name": "cached_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cached_at: datetime | None"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionCost",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "estimated",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "estimated: str | None"
+        },
+        {
+          "name": "actual",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "actual: str | None"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "code: str"
+        },
+        {
+          "name": "message",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "message: str"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionFinishedEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [
+        "WebhookEvent"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: ExecutionFinishedEventData"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionFinishedEventData",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "flow_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_id: str"
+        },
+        {
+          "name": "operation",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: ExecutionStatus"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionResult",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/operations/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: ExecutionStatus"
+        },
+        {
+          "name": "operation",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation: str"
+        },
+        {
+          "name": "output",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output: dict[str, Any] | None"
+        },
+        {
+          "name": "error",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error: ExecutionError | None"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        },
+        {
+          "name": "error_message",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_message: str | None"
+        },
+        {
+          "name": "cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost: ExecutionCost"
+        },
+        {
+          "name": "cache",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cache: ExecutionCache"
+        },
+        {
+          "name": "replayed",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "replayed: bool"
+        },
+        {
+          "name": "waiting_on",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "waiting_on: WaitingOn | None"
+        },
+        {
+          "name": "trace_url",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "trace_url: str"
+        },
+        {
+          "name": "retry_after_seconds",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "retry_after_seconds: int | None = None"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        },
+        {
+          "name": "is_completed",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_completed() -> bool"
+        },
+        {
+          "name": "is_rejected",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_rejected() -> bool"
+        },
+        {
+          "name": "is_pending",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_pending() -> bool"
+        },
+        {
+          "name": "is_finished",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_finished() -> bool"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionStatus",
+      "module": "slen",
+      "kind": "enum",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "StrEnum"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "QUEUED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "QUEUED = 'queued'"
+        },
+        {
+          "name": "WAITING",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "WAITING = 'waiting'"
+        },
+        {
+          "name": "RUNNING",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RUNNING = 'running'"
+        },
+        {
+          "name": "COMPLETED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "COMPLETED = 'completed'"
+        },
+        {
+          "name": "REJECTED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "REJECTED = 'rejected'"
+        },
+        {
+          "name": "FAILED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "FAILED = 'failed'"
+        },
+        {
+          "name": "UNCERTAIN",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "UNCERTAIN = 'uncertain'"
+        },
+        {
+          "name": "is_pending",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_pending() -> bool"
+        },
+        {
+          "name": "is_finished",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_finished() -> bool"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionStatusView",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: ExecutionStatus"
+        },
+        {
+          "name": "operation",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation: str"
+        },
+        {
+          "name": "output",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output: dict[str, Any] | None"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        },
+        {
+          "name": "error_message",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_message: str | None"
+        },
+        {
+          "name": "cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost: ExecutionCost"
+        },
+        {
+          "name": "cache",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cache: ExecutionCache"
+        },
+        {
+          "name": "waiting_on",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "waiting_on: WaitingOn | None"
+        },
+        {
+          "name": "trace_url",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "trace_url: str"
+        },
+        {
+          "name": "retry_after_seconds",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "retry_after_seconds: int | None = None"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        },
+        {
+          "name": "is_completed",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_completed() -> bool"
+        },
+        {
+          "name": "is_rejected",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_rejected() -> bool"
+        },
+        {
+          "name": "is_pending",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_pending() -> bool"
+        },
+        {
+          "name": "is_finished",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "is_finished() -> bool"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionTrace",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str"
+        },
+        {
+          "name": "flow_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_id: str"
+        },
+        {
+          "name": "flow_version_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_version_id: str"
+        },
+        {
+          "name": "flow_name",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "flow_name: str | None"
+        },
+        {
+          "name": "operation",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation: str | None"
+        },
+        {
+          "name": "operation_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation_id: str | None"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: ExecutionStatus"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        },
+        {
+          "name": "error_message",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_message: str | None"
+        },
+        {
+          "name": "cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost: ExecutionCost"
+        },
+        {
+          "name": "cache",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cache: ExecutionCache"
+        },
+        {
+          "name": "started_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "started_at: datetime"
+        },
+        {
+          "name": "finished_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "finished_at: datetime | None"
+        },
+        {
+          "name": "duration_ms",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "duration_ms: int | None"
+        },
+        {
+          "name": "nodes",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "nodes: tuple[FlowExecutionNode, ...]"
+        },
+        {
+          "name": "events",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "events: tuple[FlowExecutionEvent, ...]"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "Executions",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_sync.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: SyncContext) -> None"
+        },
+        {
+          "name": "get",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "get(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionStatusView"
+        },
+        {
+          "name": "wait",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "wait(execution_id: str, *, timeout_seconds: float = 300, on_poll_error: PollErrorListener | None = None) -> ExecutionStatusView"
+        },
+        {
+          "name": "trace",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "trace(execution_id: str, *, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionTrace"
+        }
+      ]
+    },
+    {
+      "name": "FlowExecutionEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "seq",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "seq: int"
+        },
+        {
+          "name": "type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "type: str"
+        },
+        {
+          "name": "node_key",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_key: str | None"
+        },
+        {
+          "name": "occurred_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "occurred_at: datetime"
+        },
+        {
+          "name": "payload",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "payload: dict[str, Any] | None"
+        }
+      ]
+    },
+    {
+      "name": "FlowExecutionNode",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "node_key",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_key: str"
+        },
+        {
+          "name": "node_type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_type: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: str"
+        },
+        {
+          "name": "output_port",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output_port: str | None"
+        },
+        {
+          "name": "cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost: str | None"
+        },
+        {
+          "name": "duration_ms",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "duration_ms: int | None"
+        },
+        {
+          "name": "started_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "started_at: datetime"
+        },
+        {
+          "name": "finished_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "finished_at: datetime | None"
+        },
+        {
+          "name": "metadata",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "metadata: dict[str, Any] | None"
+        },
+        {
+          "name": "attempts",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "attempts: tuple[AttemptSummary, ...]"
+        },
+        {
+          "name": "label",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "label: str | None"
+        },
+        {
+          "name": "model",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "model: str | None"
+        },
+        {
+          "name": "code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "code: str | None"
+        }
+      ]
+    },
+    {
+      "name": "FlowRuntimeError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "Health",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_health.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "app",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "app: str"
+        },
+        {
+          "name": "release",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "release: str | None"
+        },
+        {
+          "name": "server",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "server: str"
+        },
+        {
+          "name": "mysql",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "mysql: str"
+        },
+        {
+          "name": "redis",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "redis: str"
+        },
+        {
+          "name": "queue",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "queue: str | None"
+        },
+        {
+          "name": "broadcast",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "broadcast: str | None"
+        },
+        {
+          "name": "opcache_preloaded_files",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "opcache_preloaded_files: int | None"
+        },
+        {
+          "name": "opcache_cached_scripts",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "opcache_cached_scripts: int | None"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "IdempotencyConflictError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "InsufficientCreditsError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "InvalidRequestError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "InvalidResponseError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "LOG_EVENTS",
+      "module": "slen",
+      "kind": "constant",
+      "source": "src/slen/_logger.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "LOG_EVENTS = ('slen.request', 'slen.response', 'slen.retry', 'slen.refused', 'slen.unauthorized', 'slen.failed', 'slen.wait.poll', 'slen.wait.poll_failed', 'slen.webhook.rejected')",
+      "members": []
+    },
+    {
+      "name": "LoggerSpanRecorder",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_observability/_recorders.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(logger: SlenLogger, *, level: int = logging.INFO) -> None"
+        },
+        {
+          "name": "record",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "record(span: SlenSpan) -> None"
+        }
+      ]
+    },
+    {
+      "name": "OperationLimitExceededError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "OperationUncertainError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "Operations",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/operations/_sync.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": true,
+          "signature": "__init__(context: SyncContext) -> None"
+        },
+        {
+          "name": "execute",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execute(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult"
+        },
+        {
+          "name": "execute_async",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execute_async(operation: str, input: Mapping[str, Any], *, customer: str | None = None, credit_type: str | None = None, context: Mapping[str, ContextValue] | None = None, idempotency_key: str | None = None, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> ExecutionResult"
+        }
+      ]
+    },
+    {
+      "name": "OverrunApprovalRequiredError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "OverrunStoppedError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SpendRefusedError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "Page",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_page.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [
+        "T"
+      ],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: tuple[T, ...]"
+        },
+        {
+          "name": "next_cursor",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "next_cursor: str | None"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "PolicyDeniedError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "PollErrorListener",
+      "module": "slen",
+      "kind": "type",
+      "source": "src/slen/_modules/executions/_wait.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "PollErrorListener: TypeAlias = Callable[[SlenError, int], None]",
+      "members": []
+    },
+    {
+      "name": "ProviderError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "RateLimitError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "ServiceUnavailableError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "Slen",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_client.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "operations",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operations: Operations"
+        },
+        {
+          "name": "executions",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "executions: Executions"
+        },
+        {
+          "name": "customers",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "customers: Customers"
+        },
+        {
+          "name": "webhooks",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "webhooks: Webhooks"
+        },
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(*, api_key: str | None = None, timeout: float = 65.0, connect_timeout: float = 5.0, retries: int = 2, logger: SlenLogger | None = None, span_recorder: SpanRecorder | None = None, webhook_secret: str | None = None, webhook_tolerance_seconds: int = 300, http_client: httpx.Client | None = None, headers: Mapping[str, str] | None = None, base_url: str = DEFAULT_BASE_URL) -> None"
+        },
+        {
+          "name": "with_logger",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "with_logger(logger: SlenLogger) -> 'Slen'"
+        },
+        {
+          "name": "health",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "health(*, timeout: float | None = None, retries: int | None = None, request_id: str | None = None) -> Health"
+        },
+        {
+          "name": "close",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "close() -> None"
+        }
+      ]
+    },
+    {
+      "name": "SlenError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "Exception"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "code: str | None"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: int | None"
+        },
+        {
+          "name": "details",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "details: Mapping[str, Any]"
+        },
+        {
+          "name": "request_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "request_id: str | None"
+        },
+        {
+          "name": "retry_after_seconds",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "retry_after_seconds: int | None"
+        },
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(message: str, *, code: str | None = None, status: int | None = None, details: Mapping[str, Any] | None = None, request_id: str | None = None, retry_after_seconds: int | None = None) -> None"
+        }
+      ]
+    },
+    {
+      "name": "SlenLogger",
+      "module": "slen",
+      "kind": "protocol",
+      "source": "src/slen/_logger.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "Protocol"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "debug",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "debug(msg: str, /, *, extra: Mapping[str, object] | None = ...) -> None"
+        },
+        {
+          "name": "info",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "info(msg: str, /, *, extra: Mapping[str, object] | None = ...) -> None"
+        },
+        {
+          "name": "warning",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "warning(msg: str, /, *, extra: Mapping[str, object] | None = ...) -> None"
+        },
+        {
+          "name": "error",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error(msg: str, /, *, extra: Mapping[str, object] | None = ...) -> None"
+        }
+      ]
+    },
+    {
+      "name": "SlenSpan",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_observability/_span.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "operation",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation: str"
+        },
+        {
+          "name": "outcome",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "outcome: str"
+        },
+        {
+          "name": "status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "status: ExecutionStatus | None"
+        },
+        {
+          "name": "duration_ms",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "duration_ms: int"
+        },
+        {
+          "name": "execution_id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "execution_id: str | None"
+        },
+        {
+          "name": "operation_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "operation_code: str | None"
+        },
+        {
+          "name": "estimated",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "estimated: str | None"
+        },
+        {
+          "name": "actual",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "actual: str | None"
+        },
+        {
+          "name": "error_code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "error_code: str | None"
+        },
+        {
+          "name": "cache_hit",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cache_hit: bool | None"
+        }
+      ]
+    },
+    {
+      "name": "SpanRecorder",
+      "module": "slen",
+      "kind": "protocol",
+      "source": "src/slen/_observability/_recorders.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "Protocol"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "record",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "record(span: SlenSpan) -> None"
+        }
+      ]
+    },
+    {
+      "name": "SpendRefusedError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "TimeoutError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError",
+        "builtins.TimeoutError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
+      "name": "UnknownWebhookEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [
+        "WebhookEvent"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "data",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "data: dict[str, Any]"
+        }
+      ]
+    },
+    {
+      "name": "WaitingOn",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "node_key",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "node_key: str"
+        },
+        {
+          "name": "type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "type: str"
+        },
+        {
+          "name": "resume_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "resume_at: datetime | None"
+        }
+      ]
+    },
+    {
+      "name": "WebhookEvent",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "id",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "id: str"
+        },
+        {
+          "name": "type",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "type: str"
+        },
+        {
+          "name": "created_at",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "created_at: datetime"
+        }
+      ]
+    },
+    {
+      "name": "WebhookEventType",
+      "module": "slen",
+      "kind": "enum",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "StrEnum"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "RESERVATION_CREATED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RESERVATION_CREATED = 'reservation.created'"
+        },
+        {
+          "name": "RESERVATION_CAPTURED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RESERVATION_CAPTURED = 'reservation.captured'"
+        },
+        {
+          "name": "RESERVATION_RELEASED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RESERVATION_RELEASED = 'reservation.released'"
+        },
+        {
+          "name": "RESERVATION_EXPIRED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RESERVATION_EXPIRED = 'reservation.expired'"
+        },
+        {
+          "name": "RESERVATION_OVERRUN",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "RESERVATION_OVERRUN = 'reservation.overrun'"
+        },
+        {
+          "name": "BUDGET_THRESHOLD_REACHED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "BUDGET_THRESHOLD_REACHED = 'budget.threshold_reached'"
+        },
+        {
+          "name": "BUDGET_EXCEEDED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "BUDGET_EXCEEDED = 'budget.exceeded'"
+        },
+        {
+          "name": "OPERATION_AUTHORIZED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_AUTHORIZED = 'operation.authorized'"
+        },
+        {
+          "name": "OPERATION_DENIED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_DENIED = 'operation.denied'"
+        },
+        {
+          "name": "OPERATION_STARTED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_STARTED = 'operation.started'"
+        },
+        {
+          "name": "OPERATION_COMPLETED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_COMPLETED = 'operation.completed'"
+        },
+        {
+          "name": "OPERATION_FAILED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_FAILED = 'operation.failed'"
+        },
+        {
+          "name": "OPERATION_UNCERTAIN",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OPERATION_UNCERTAIN = 'operation.uncertain'"
+        },
+        {
+          "name": "FLOW_PUBLISHED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "FLOW_PUBLISHED = 'flow.published'"
+        },
+        {
+          "name": "FLOW_ROLLED_BACK",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "FLOW_ROLLED_BACK = 'flow.rolled_back'"
+        },
+        {
+          "name": "CONNECTION_COOLDOWN_STARTED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "CONNECTION_COOLDOWN_STARTED = 'connection.cooldown_started'"
+        },
+        {
+          "name": "CONNECTION_HEALTH_CHANGED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "CONNECTION_HEALTH_CHANGED = 'connection.health_changed'"
+        },
+        {
+          "name": "APPROVAL_REQUESTED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "APPROVAL_REQUESTED = 'approval.requested'"
+        },
+        {
+          "name": "APPROVAL_DECIDED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "APPROVAL_DECIDED = 'approval.decided'"
+        },
+        {
+          "name": "EXECUTION_FINISHED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "EXECUTION_FINISHED = 'execution.finished'"
+        },
+        {
+          "name": "ALERT_OPENED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "ALERT_OPENED = 'alert.opened'"
+        },
+        {
+          "name": "ALERT_RESOLVED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "ALERT_RESOLVED = 'alert.resolved'"
+        },
+        {
+          "name": "OVERRUN_DECIDED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "OVERRUN_DECIDED = 'overrun.decided'"
+        },
+        {
+          "name": "CUSTOMER_BALANCE_LOW",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "CUSTOMER_BALANCE_LOW = 'customer.balance_low'"
+        },
+        {
+          "name": "LEDGER_DEGRADED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "LEDGER_DEGRADED = 'ledger.degraded'"
+        },
+        {
+          "name": "LEDGER_RESTORED",
+          "kind": "member",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "LEDGER_RESTORED = 'ledger.restored'"
+        }
+      ]
+    },
+    {
+      "name": "WebhookPayload",
+      "module": "slen",
+      "kind": "type",
+      "source": "src/slen/_modules/webhooks/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "WebhookPayload: TypeAlias = str | bytes",
+      "members": []
+    },
+    {
+      "name": "WebhookSignatureError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "reason",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "reason: WebhookSignatureReason"
+        },
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(message: str, *, reason: WebhookSignatureReason, code: str | None = WEBHOOK_SIGNATURE_INVALID, status: int | None = None, details: Mapping[str, Any] | None = None, request_id: str | None = None, retry_after_seconds: int | None = None) -> None"
+        }
+      ]
+    },
+    {
+      "name": "WebhookSignatureReason",
+      "module": "slen",
+      "kind": "type",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "WebhookSignatureReason: TypeAlias = Literal['missing_header', 'malformed_header', 'outside_tolerance', 'no_matching_signature']",
+      "members": []
+    },
+    {
+      "name": "Webhooks",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/webhooks/_webhooks.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(*, secret: str | None = None, tolerance_seconds: int = 300, logger: SlenLogger | None = None) -> None"
+        },
+        {
+          "name": "verify",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "verify(payload: WebhookPayload, signature_header: str | None, *, secret: str | None = None, tolerance_seconds: int | None = None, now: datetime | None = None) -> bool"
+        },
+        {
+          "name": "construct_event",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "construct_event(payload: WebhookPayload, signature_header: str | None, *, secret: str | None = None, tolerance_seconds: int | None = None, now: datetime | None = None) -> WebhookEvent"
+        }
+      ]
+    },
+    {
+      "name": "__version__",
+      "module": "slen",
+      "kind": "constant",
+      "source": "src/slen/_version.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "__version__ = '0.4.0'",
+      "members": []
+    },
+    {
+      "name": "generate_idempotency_key",
+      "module": "slen",
+      "kind": "function",
+      "source": "src/slen/_idempotency.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "generate_idempotency_key() -> str",
+      "members": []
+    },
+    {
+      "name": "idempotency_key_for_job",
+      "module": "slen",
+      "kind": "function",
+      "source": "src/slen/_idempotency.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": "idempotency_key_for_job(job_id: str | int, operation: str) -> str",
+      "members": []
+    },
+    {
+      "name": "OtelSpanRecorder",
+      "module": "slen.otel",
+      "kind": "class",
+      "source": "src/slen/otel.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__(tracer: trace.Tracer | None = None) -> None"
+        },
+        {
+          "name": "record",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "record(span: SlenSpan) -> None"
+        }
+      ]
+    },
+    {
+      "name": "FakeTransport",
+      "module": "slen.testing",
+      "kind": "class",
+      "source": "src/slen/testing.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "httpx.BaseTransport",
+        "httpx.AsyncBaseTransport"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__() -> None"
+        },
+        {
+          "name": "push",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "push(status: int, body: Mapping[str, Any] | None = None, *, headers: Mapping[str, str] | None = None) -> Self"
+        },
+        {
+          "name": "push_exception",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "push_exception(error: Exception) -> Self"
+        },
+        {
+          "name": "requests",
+          "kind": "property",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "requests() -> tuple[RecordedRequest, ...]"
+        },
+        {
+          "name": "last",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "last() -> RecordedRequest"
+        },
+        {
+          "name": "handle_request",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "handle_request(request: httpx.Request) -> httpx.Response"
+        },
+        {
+          "name": "handle_async_request",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "async handle_async_request(request: httpx.Request) -> httpx.Response"
+        }
+      ]
+    },
+    {
+      "name": "MemorySpanRecorder",
+      "module": "slen.testing",
+      "kind": "class",
+      "source": "src/slen/testing.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "__init__",
+          "kind": "constructor",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "__init__() -> None"
+        },
+        {
+          "name": "spans",
+          "kind": "property",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "spans() -> tuple[SlenSpan, ...]"
+        },
+        {
+          "name": "record",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "record(span: SlenSpan) -> None"
+        },
+        {
+          "name": "last",
+          "kind": "method",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "last() -> SlenSpan"
+        }
+      ]
+    },
+    {
+      "name": "RecordedRequest",
+      "module": "slen.testing",
+      "kind": "class",
+      "source": "src/slen/testing.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "method",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "method: str"
+        },
+        {
+          "name": "url",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "url: str"
+        },
+        {
+          "name": "headers",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "headers: Mapping[str, str]"
+        },
+        {
+          "name": "body",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "body: Any"
+        }
+      ]
+    }
+  ]
+}

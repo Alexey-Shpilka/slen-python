@@ -1,0 +1,71 @@
+{
+  "id": "django",
+  "status": "ready",
+  "summary": "A Django application: one Slen per worker process, built on the first request the process serves rather than when the module is imported (a client made before a fork would share its connections); a view that hands a run to a worker under the order's idempotency key, through a copy of the client that logs with the request's id, and answers 202 without waiting for it; a view that reads the run's status once.",
+  "languages": ["python"],
+  "framework": {
+    "name": "django",
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/orders/42/email",
+        "headers": { "X-Request-Id": "req-5b81d2e7" },
+        "status": 202,
+        "answer": { "execution_id": "74438200973594750", "status": "queued" }
+      },
+      {
+        "method": "GET",
+        "path": "/runs/74438200973594750",
+        "headers": { "X-Request-Id": "req-5b81d2e8" },
+        "status": 200,
+        "answer": { "execution_id": "74438200973594750", "status": "completed" }
+      }
+    ]
+  },
+  "regions": ["client", "submit", "status", "urls"],
+  "responses": [
+    {
+      "status": 202,
+      "body": {
+        "data": {
+          "execution_id": "74438200973594750",
+          "status": "queued",
+          "operation": "generate_email",
+          "output": null,
+          "error": null,
+          "error_code": null,
+          "error_message": null,
+          "cost": { "estimated": null, "actual": null },
+          "cache": { "hit": false, "cached_at": null },
+          "replayed": false,
+          "waiting_on": null,
+          "trace_url": "/v1/executions/74438200973594750",
+          "retry_after_seconds": 2
+        }
+      }
+    },
+    {
+      "status": 200,
+      "body": {
+        "data": {
+          "execution_id": "74438200973594750",
+          "status": "completed",
+          "operation": "generate_email",
+          "output": {
+            "model": "gpt-4o-mini",
+            "content": "Hi Ada, your order 42 is on its way.",
+            "finish_reason": "stop",
+            "tool_calls": null,
+            "usage": { "input_tokens": 15, "output_tokens": 11, "cached_input_tokens": 0 }
+          },
+          "error_code": null,
+          "error_message": null,
+          "cost": { "estimated": "0.00061560", "actual": "0.00000885" },
+          "cache": { "hit": false, "cached_at": null },
+          "waiting_on": null,
+          "trace_url": "/v1/executions/74438200973594750"
+        }
+      }
+    }
+  ]
+}

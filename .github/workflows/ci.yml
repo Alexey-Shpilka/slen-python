@@ -1,0 +1,107 @@
+name: ci
+on:
+  push:
+    branches: [master]
+  pull_request: {}
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch: {}
+  workflow_call: {}
+permissions: { contents: read }
+concurrency: { group: 'ci-${{ github.event_name }}-${{ github.ref }}', cancel-in-progress: true }
+
+# No job reads a secret. Every checkout is `persist-credentials: false`: no job
+# pushes, and the steps that follow run other people's code (the tools of uv.lock).
+# See .github/AGENTS.md.
+
+# The Python of setup-python, never one uv downloads.
+env: { UV_PYTHON_DOWNLOADS: never }
+
+jobs:
+  python:
+    name: python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13', '3.14']
+    env: { UV_PYTHON: '${{ matrix.python }}' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: '${{ matrix.python }}' }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: '0.13.6', enable-cache: false }
+      - run: uv sync --locked --all-extras             # the tools exactly as uv.lock has them
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync ruff format --check .
+      - run: uv run --no-sync mypy
+      - name: mypy on each help example               # one file at a time: every one is a script named python.py
+        run: for example in examples/help/*/python.py; do uv run --no-sync mypy --strict "$example" || exit 1; done
+      - run: uv run --no-sync pyright
+      - run: uv run --no-sync pytest
+      - run: uv run --no-sync python scripts/export_help_slice.py --check
+
+  # The floor of what a user may install: httpx 0.27.0 and every other direct
+  # dependency at its lowest. Without the check that 0.27 is what got installed,
+  # the job would pass on whatever the resolver chose. Then the wheel, not the
+  # source, is installed and taken through scripts/floor.py.
+  python-lowest:
+    name: python 3.11, lowest httpx
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { UV_PYTHON: '3.11' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: '3.11' }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: '0.13.6', enable-cache: false }
+      - run: uv sync --resolution lowest-direct --all-extras
+      - name: httpx 0.27 is what got installed
+        run: uv run --no-sync python -c "import httpx, sys; sys.exit(0 if httpx.__version__.startswith('0.27.') else 1)"
+      - run: uv run --no-sync pytest
+      - run: uv build --wheel -o dist
+      - run: uv pip install --no-deps --reinstall dist/*.whl   # the wheel in place of the source
+      - run: uv run --no-sync python scripts/floor.py
+
+  # What ships, as a user installs it: the wheel and the sdist hold the package
+  # and nothing else, and the help examples type-check against the installed
+  # wheel in an environment of their own. See scripts/consumer.py.
+  python-consumer:
+    name: the package as it ships
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { UV_PYTHON: '3.11' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: '3.11' }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: '0.13.6', enable-cache: false }
+      - run: uv sync --locked --all-extras
+      - run: uv build -o dist
+      - run: uv run --no-sync twine check --strict dist/*
+      - run: uv run --no-sync python scripts/check_dist.py dist
+      - run: uv run --no-sync python scripts/consumer.py dist
+
+  # What a user installs today: every dependency at its newest, once a week.
+  python-newest:
+    name: python 3.14, newest dependencies
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env: { UV_PYTHON: '3.14' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: '3.14' }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: '0.13.6', enable-cache: false }
+      - run: uv sync --upgrade --all-extras
+      - run: uv run --no-sync pytest
