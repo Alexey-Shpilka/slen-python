@@ -69,6 +69,9 @@ class Fields:
     def flag(self, name: str) -> bool:
         return cast("bool", self._typed(name, "required", bool))
 
+    def optional_flag(self, name: str) -> bool | None:
+        return cast("bool | None", self._typed(name, "optional", bool))
+
     def moment(self, name: str) -> datetime:
         return cast("datetime", self._moment(name, "required"))
 

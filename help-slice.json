@@ -2865,6 +2865,15 @@
           "signature": "events: tuple[FlowExecutionEvent, ...]"
         },
         {
+          "name": "history_paused",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "history_paused: bool | None = None"
+        },
+        {
           "name": "request_id",
           "kind": "field",
           "static": false,
