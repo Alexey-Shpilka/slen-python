@@ -97,6 +97,10 @@ class CustomerNotFoundError(SlenError):
     """The project has never seen this end customer."""
 
 
+class PlanLimitError(SlenError):
+    """The organization's plan said no; details["required_plan"] is the plan to upgrade to."""
+
+
 class RateLimitError(SlenError):
     """429: the key sent more requests than its rate limit allows."""
 

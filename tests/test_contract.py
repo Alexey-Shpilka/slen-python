@@ -14,6 +14,7 @@ import slen
 from slen import Slen
 from slen._config import DEFAULT_BASE_URL
 from slen._http._endpoints import Endpoint
+from slen._http._error_map import BY_CODE
 from slen.testing import FakeTransport, RecordedRequest
 from support.harness import (
     BASE,
@@ -319,6 +320,41 @@ def test_with_the_spec_every_answer_of_a_row_has_the_shape_its_operation_answers
 
 def test_with_the_spec_the_host_the_sdk_talks_to_is_its_first_server() -> None:
     assert spec()["servers"][0]["url"] == f"{DEFAULT_BASE_URL}/api"
+
+
+# ---------------------------------------------------------------------------
+# The error codes: every code of `ErrorCode` is decided — a type of contract/error-codes.json, or a line of
+# contract/unmapped-error-codes.json under its reason, never both — and neither file names a code the spec lost.
+
+ERROR_TABLE: Final = frozenset(json.loads((CONTRACT / "error-codes.json").read_text(encoding="utf-8"))["codes"])
+UNMAPPED_GROUPS: Final[dict[str, dict[str, Any]]] = json.loads(
+    (CONTRACT / "unmapped-error-codes.json").read_text(encoding="utf-8")
+)["groups"]
+UNMAPPED: Final = tuple(code for group in UNMAPPED_GROUPS.values() for code in group["codes"])
+
+
+def spec_error_codes() -> list[str]:
+    return [str(code) for code in schema("ErrorCode")["enum"]]
+
+
+def test_with_the_spec_the_error_codes_are_a_non_empty_enum() -> None:
+    assert len(spec_error_codes()) > 0
+
+
+def test_with_the_spec_the_table_maps_only_codes_the_spec_has() -> None:
+    assert sorted(ERROR_TABLE - set(spec_error_codes())) == []
+    assert sorted(set(BY_CODE) - set(spec_error_codes())) == []
+
+
+def test_with_the_spec_every_code_of_it_has_a_type_or_a_line_in_the_unmapped_list() -> None:
+    assert [code for code in spec_error_codes() if code not in ERROR_TABLE and code not in UNMAPPED] == []
+
+
+def test_with_the_spec_the_unmapped_list_holds_live_codes_outside_the_table_each_once_with_a_reason() -> None:
+    assert [code for code in UNMAPPED if code not in spec_error_codes()] == []
+    assert [code for code in UNMAPPED if code in ERROR_TABLE] == []
+    assert len(set(UNMAPPED)) == len(UNMAPPED)
+    assert [name for name, group in UNMAPPED_GROUPS.items() if not group["reason"].strip()] == []
 
 
 # ---------------------------------------------------------------------------

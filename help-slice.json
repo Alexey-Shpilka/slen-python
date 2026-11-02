@@ -3530,6 +3530,23 @@
       ]
     },
     {
+      "name": "PlanLimitError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
+    },
+    {
       "name": "PolicyDeniedError",
       "module": "slen",
       "kind": "class",

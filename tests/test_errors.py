@@ -47,7 +47,7 @@ def test_every_error_class_is_a_type_of_the_contract() -> None:
     names = {f"{name}Error" for name in TYPES} | {"SlenError"}
 
     assert set(error_classes()) == names
-    assert len(names) == 23
+    assert len(names) == 24
 
 
 def test_timeout_and_connection_errors_extend_the_builtins_too() -> None:
@@ -198,6 +198,7 @@ def test_the_money_table_of_the_readme_names_every_type() -> None:
         "InvalidRequestError",
         "AuthenticationError",
         "IdempotencyConflictError",
+        "PlanLimitError",
         "ServiceUnavailableError",
         "TimeoutError",
         "ConnectionError",
