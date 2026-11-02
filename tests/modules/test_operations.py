@@ -10,6 +10,7 @@ from slen import (
     InvalidRequestError,
     InvalidResponseError,
     SpendRefusedError,
+    __version__,
 )
 from slen.testing import FakeTransport, MemorySpanRecorder
 from support.harness import BASE, Kind, data, drive, raised, run_result
@@ -43,7 +44,7 @@ def test_execute_sends_the_operation_the_input_and_the_context(kind: Kind) -> No
     assert sent.headers["idempotency-key"] == "t-42:reply"
     assert sent.headers["authorization"] == "Bearer key-for-tests"
     assert sent.headers["accept"] == "application/json"
-    assert sent.headers["user-agent"].startswith("slen-sdk-python/0.4.0 python/")
+    assert sent.headers["user-agent"].startswith(f"slen-sdk-python/{__version__} python/")
 
 
 def test_execute_without_options_sends_no_context_and_a_generated_key(kind: Kind) -> None:
