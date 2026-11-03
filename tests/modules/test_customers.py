@@ -11,6 +11,7 @@ from slen import (
     CustomerStatus,
     InvalidRequestError,
     InvalidResponseError,
+    PlanLimitError,
     Slen,
 )
 from slen.testing import FakeTransport
@@ -230,6 +231,31 @@ def test_delete_of_a_customer_that_never_was_is_customer_not_found(kind: Kind) -
     fake = FakeTransport().push(404, {"error": {"code": "customer_not_found", "message": "Not found"}})
 
     assert isinstance(raised(kind, fake, lambda slen: slen.customers.delete(USER)), CustomerNotFoundError)
+
+
+def test_a_new_customer_on_a_plan_without_customers_is_a_plan_limit_that_names_the_plan_to_upgrade_to(
+    kind: Kind,
+) -> None:
+    details = {"feature": "customers", "plan": "free", "required_plan": "pro"}
+    refusal = {
+        "code": "plan_feature_unavailable",
+        "message": "This organization's Free plan does not include customers.",
+        "details": details,
+        "request_id": "req_1",
+    }
+    fake = FakeTransport().push(403, {"error": refusal})
+
+    error = raised(kind, fake, lambda slen: slen.customers.create(USER), retries=2)
+
+    assert isinstance(error, PlanLimitError)
+    assert (error.code, error.status, dict(error.details), error.request_id) == (
+        "plan_feature_unavailable",
+        403,
+        details,
+        "req_1",
+    )
+    assert error.details["required_plan"] == "pro"
+    assert len(fake.requests) == 1
 
 
 def test_a_page_without_its_cursor_is_an_invalid_response(kind: Kind) -> None:

@@ -67,6 +67,7 @@ SURFACE: Final = frozenset(
         "OperationLimitExceededError",
         "ConcurrencyLimitError",
         "CustomerNotFoundError",
+        "PlanLimitError",
         "RateLimitError",
         "PolicyDeniedError",
         "CustomerBlockedError",

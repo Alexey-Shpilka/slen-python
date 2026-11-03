@@ -157,4 +157,6 @@ class ExecutionTrace:
     duration_ms: int | None
     nodes: tuple[FlowExecutionNode, ...]
     events: tuple[FlowExecutionEvent, ...]
+    # The month's executions with history had run out: the run wrote no trace (None from a backend before 1.0.23).
+    history_paused: bool | None = None
     request_id: str | None = field(default=None, compare=False)

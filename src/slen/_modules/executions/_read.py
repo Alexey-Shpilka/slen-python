@@ -114,5 +114,6 @@ def trace_of(answered: Answered) -> ExecutionTrace:
         duration_ms=run.optional_integer("duration_ms"),
         nodes=tuple(node_of(row) for row in run.rows("nodes")),
         events=tuple(event_of(row) for row in run.rows("events")),
+        history_paused=run.optional_flag("history_paused"),
         request_id=answered.request_id,
     )

@@ -3,7 +3,7 @@
   "language": "python",
   "package": {
     "name": "slen",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "manifest": "pyproject.toml",
     "runtime": {
       "name": "python",
@@ -2865,6 +2865,15 @@
           "signature": "events: tuple[FlowExecutionEvent, ...]"
         },
         {
+          "name": "history_paused",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "history_paused: bool | None = None"
+        },
+        {
           "name": "request_id",
           "kind": "field",
           "static": false,
@@ -3528,6 +3537,23 @@
           "signature": "request_id: str | None = None"
         }
       ]
+    },
+    {
+      "name": "PlanLimitError",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_errors.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [],
+      "type_parameters": [],
+      "extends": [
+        "SlenError"
+      ],
+      "implements": [],
+      "signature": null,
+      "members": []
     },
     {
       "name": "PolicyDeniedError",
@@ -4492,7 +4518,7 @@
       "type_parameters": [],
       "extends": [],
       "implements": [],
-      "signature": "__version__ = '0.4.0'",
+      "signature": "__version__ = '0.4.1'",
       "members": []
     },
     {

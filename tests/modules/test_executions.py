@@ -55,6 +55,16 @@ def test_a_trace_without_the_fields_the_spec_leaves_out_reads_them_as_none(kind:
     found = drive(kind, fake, lambda slen: slen.executions.trace(RUN))
 
     assert (found.flow_name, found.operation, found.finished_at) == (None, None, None)
+    assert found.history_paused is None
+
+
+def test_a_trace_whose_history_was_paused_says_so(kind: Kind) -> None:
+    fake = FakeTransport().push(200, data({**trace(), "history_paused": True, "nodes": [], "events": []}))
+
+    found = drive(kind, fake, lambda slen: slen.executions.trace(RUN))
+
+    assert found.history_paused is True
+    assert (found.nodes, found.events) == ((), ())
 
 
 def test_wait_reads_at_the_pace_it_doubles_until_the_run_is_over(kind: Kind, clock: FakeClock) -> None:
