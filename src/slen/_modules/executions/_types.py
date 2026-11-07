@@ -148,6 +148,14 @@ class FlowExecutionNode:
     label: str | None
     model: str | None
     code: str | None
+    # What a model node left: its answer on `success` / `tool_calls` (`content`, `finish_reason`, `usage`, ...), its
+    # `error` on a failure port. None for every other node, when `output_stored` is not "stored", and for older runs.
+    output: dict[str, Any] | None = None
+    # The kept `output` was cut to the limit (64 KB of JSON unless the service is set up otherwise).
+    output_truncated: bool | None = None
+    # Whether a model node's output is kept: "stored", "disabled_by_project", "withheld" (grounded with Google Search:
+    # the rest is kept, its `content` is not) or "history_paused"; None for every other node and for older runs.
+    output_stored: str | None = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

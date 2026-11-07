@@ -284,6 +284,15 @@ def trace(**changes: Any) -> dict[str, Any]:
                 "label": "Answer",
                 "model": "gpt-4o-mini",
                 "code": None,
+                "output": {
+                    "model": "gpt-4o-mini",
+                    "content": "Hello",
+                    "finish_reason": "stop",
+                    "tool_calls": [],
+                    "usage": {"input_tokens": 12000, "output_tokens": 4183, "cached_input_tokens": 4000},
+                },
+                "output_truncated": False,
+                "output_stored": "stored",
             }
         ],
         "events": [

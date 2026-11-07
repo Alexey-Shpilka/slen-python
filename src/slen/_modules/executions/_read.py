@@ -109,6 +109,9 @@ def node_of(fields: Fields) -> FlowExecutionNode:
         label=fields.optional_text("label"),
         model=fields.optional_text("model"),
         code=fields.optional_text("code"),
+        output=fields.optional_json("output"),
+        output_truncated=fields.optional_flag("output_truncated"),
+        output_stored=fields.optional_text("output_stored"),
     )
 
 
