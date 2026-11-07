@@ -72,6 +72,23 @@ class Fields:
     def optional_flag(self, name: str) -> bool | None:
         return cast("bool | None", self._typed(name, "optional", bool))
 
+    def optional_counts(self, name: str) -> dict[str, int] | None:
+        return cast("dict[str, int] | None", self._map(name, "optional", int))
+
+    def amounts(self, name: str) -> dict[str, str]:
+        return cast("dict[str, str]", self._map(name, "required", str))
+
+    # An object of one kind of value by name ({"web_search": 6}), each value held as a field of its own.
+    def _map(self, name: str, presence: Presence, kind: type[object]) -> dict[str, object] | None:
+        value = self._json(name, presence)
+
+        if value is None:
+            return None
+
+        inner = Fields(value, f"{self._where}.{name}")
+
+        return {key: inner._typed(key, "required", kind) for key in value}
+
     def moment(self, name: str) -> datetime:
         return cast("datetime", self._moment(name, "required"))
 
@@ -117,6 +134,11 @@ class Fields:
 
     def nested(self, name: str) -> "Fields":
         return Fields(self._get(name, "required"), f"{self._where}.{name}")
+
+    def optional_nested(self, name: str) -> "Fields | None":
+        value = self._get(name, "optional")
+
+        return None if value is None else Fields(value, f"{self._where}.{name}")
 
     def nullable_nested(self, name: str) -> "Fields | None":
         value = self._get(name, "nullable")

@@ -35,7 +35,7 @@
           "error": null,
           "error_code": null,
           "error_message": null,
-          "cost": { "estimated": null, "actual": null },
+          "cost": { "estimated": null, "actual": null, "incomplete": false },
           "cache": { "hit": false, "cached_at": null },
           "replayed": false,
           "waiting_on": null,
@@ -60,7 +60,7 @@
           },
           "error_code": null,
           "error_message": null,
-          "cost": { "estimated": "0.00061560", "actual": "0.00000885" },
+          "cost": { "estimated": "0.00061560", "actual": "0.00000885", "incomplete": false },
           "cache": { "hit": false, "cached_at": null },
           "waiting_on": null,
           "trace_url": "/v1/executions/74438200973594750"

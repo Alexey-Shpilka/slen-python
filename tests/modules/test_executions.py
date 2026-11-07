@@ -8,10 +8,12 @@ import pytest
 
 from slen import (
     AsyncSlen,
+    AttemptCostBreakdown,
     ConnectionError,
     CustomerNotFoundError,
     ExecutionStatus,
     InvalidRequestError,
+    InvalidResponseError,
     RateLimitError,
     SlenError,
 )
@@ -20,6 +22,25 @@ from slen.testing import FakeTransport, MemorySpanRecorder
 from support.harness import BASE, KEY, FakeClock, Kind, data, drive, raised, run_view, trace
 
 RUN = "74438200973594700"
+ATTEMPT_PARTS = (
+    "input_tokens",
+    "output_tokens",
+    "cached_input_tokens",
+    "cache_write_tokens",
+    "cache_write_long_tokens",
+    "reasoning_tokens",
+    "tool_calls",
+    "cost_breakdown",
+    "cost_incomplete",
+)
+ATTEMPT_BREAKDOWN: dict[str, Any] = {
+    "input": "0.00120000",
+    "cached_input": "0.00030000",
+    "cache_write": "0.00000000",
+    "output": "0.00251000",
+    "tools": {},
+    "total": "0.00401000",
+}
 RUNNING = data(run_view(status="running", output=None))
 LIMITED = {"error": {"code": "rate_limit_exceeded", "message": "API rate limit exceeded"}}
 
@@ -46,6 +67,83 @@ def test_trace_reads_every_node_event_and_attempt(kind: Kind) -> None:
     assert found.events[0].payload == {}
     assert found.duration_ms == 2000
     assert found.request_id == "req-t"
+
+
+def test_an_attempt_reads_its_tokens_and_its_cost_by_its_parts(kind: Kind) -> None:
+    fake = FakeTransport().push(200, data(trace()))
+
+    attempt = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes[0].attempts[0]
+
+    assert (attempt.input_tokens, attempt.output_tokens, attempt.cached_input_tokens) == (12000, 4183, 4000)
+    assert (attempt.cache_write_tokens, attempt.cache_write_long_tokens, attempt.reasoning_tokens) == (0, 0, 0)
+    assert attempt.tool_calls == {}
+    assert attempt.cost_breakdown == AttemptCostBreakdown(
+        input="0.00120000",
+        cached_input="0.00030000",
+        cache_write="0.00000000",
+        output="0.00251000",
+        tools={},
+        total="0.00401000",
+    )
+    assert attempt.cost_incomplete is False
+
+
+def test_an_attempt_reads_its_paid_tools_and_a_cost_slen_could_not_price_whole(kind: Kind) -> None:
+    paid = {
+        "tool_calls": {"web_search": 2},
+        "cost_breakdown": {**ATTEMPT_BREAKDOWN, "tools": {"web_search": "0.02000000"}, "total": "0.02401000"},
+        "cost": "0.02401000",
+        "cost_incomplete": True,
+    }
+    fake = FakeTransport().push(200, data(with_attempt({**first_attempt(), **paid})))
+
+    attempt = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes[0].attempts[0]
+
+    assert attempt.tool_calls == {"web_search": 2}
+    assert attempt.cost_breakdown is not None
+    assert attempt.cost_breakdown.tools == {"web_search": "0.02000000"}
+    assert attempt.cost_incomplete is True
+
+
+def test_an_attempt_without_its_tokens_and_its_breakdown_reads_them_as_none(kind: Kind) -> None:
+    lean = {key: value for key, value in first_attempt().items() if key not in ATTEMPT_PARTS}
+    fake = FakeTransport().push(200, data(with_attempt(lean)))
+
+    found = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes[0].attempts[0]
+
+    assert [getattr(found, name) for name in ATTEMPT_PARTS] == [None] * len(ATTEMPT_PARTS)
+
+
+@pytest.mark.parametrize(
+    ("changes", "field"),
+    [
+        ({"tool_calls": {"web_search": "2"}}, "tool_calls.web_search"),
+        ({"tool_calls": [2]}, "tool_calls"),
+        ({"cost_breakdown": {**ATTEMPT_BREAKDOWN, "tools": {"web_search": 0.02}}}, "tools.web_search"),
+        ({"cost_breakdown": {key: value for key, value in ATTEMPT_BREAKDOWN.items() if key != "tools"}}, "tools"),
+        ({"cost_incomplete": "no"}, "cost_incomplete"),
+    ],
+)
+def test_an_attempt_whose_tools_are_not_counts_and_amounts_is_unreadable(
+    kind: Kind, changes: dict[str, Any], field: str
+) -> None:
+    fake = FakeTransport().push(200, data(with_attempt({**first_attempt(), **changes})))
+
+    error = raised(kind, fake, lambda slen: slen.executions.trace(RUN))
+
+    assert isinstance(error, InvalidResponseError)
+    assert f".{field}`" in str(error)
+
+
+def first_attempt() -> dict[str, Any]:
+    return dict(trace()["nodes"][0]["attempts"][0])
+
+
+def with_attempt(attempt: dict[str, Any]) -> dict[str, Any]:
+    held = trace()
+    node = held["nodes"][0]
+
+    return {**held, "nodes": [{**node, "attempts": [attempt]}, *held["nodes"][1:]]}
 
 
 def test_a_trace_without_the_fields_the_spec_leaves_out_reads_them_as_none(kind: Kind) -> None:
@@ -207,7 +305,11 @@ def test_a_wait_takes_no_request_id(kind: Kind) -> None:
 
 
 def test_a_wait_writes_one_span_with_what_it_read(kind: Kind) -> None:
-    fake = FakeTransport().push(200, RUNNING).push(200, data(run_view(cost={"estimated": "1.5", "actual": "1.4"})))
+    fake = (
+        FakeTransport()
+        .push(200, RUNNING)
+        .push(200, data(run_view(cost={"estimated": "1.5", "actual": "1.4", "incomplete": False})))
+    )
     spans = MemorySpanRecorder()
 
     drive(kind, fake, lambda slen: slen.executions.wait(RUN), span_recorder=spans)

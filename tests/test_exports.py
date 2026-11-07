@@ -39,6 +39,7 @@ SURFACE: Final = frozenset(
         "FlowExecutionNode",
         "FlowExecutionEvent",
         "AttemptSummary",
+        "AttemptCostBreakdown",
         # The enumerations.
         "ExecutionStatus",
         "CustomerStatus",

@@ -30,6 +30,8 @@ class ExecutionCost:
 
     estimated: str | None
     actual: str | None
+    # A provider billed something Slen could not price: actual is what Slen knew (false until actual is set).
+    incomplete: bool
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -92,6 +94,18 @@ class ExecutionStatusView:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class AttemptCostBreakdown:
+    """What the cost of a provider attempt is made of (decimal strings); total is their sum."""
+
+    input: str
+    cached_input: str
+    cache_write: str
+    output: str
+    tools: dict[str, str]
+    total: str
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class AttemptSummary:
     """One provider attempt a node opened."""
 
@@ -105,6 +119,16 @@ class AttemptSummary:
     cost: str | None
     provider_request_id: str | None
     model_code: str | None
+    # The whole input with the cache read and writes, the whole output with reasoning, and the parts of each.
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    cached_input_tokens: int | None = None
+    cache_write_tokens: int | None = None
+    cache_write_long_tokens: int | None = None
+    reasoning_tokens: int | None = None
+    tool_calls: dict[str, int] | None = None
+    cost_breakdown: AttemptCostBreakdown | None = None
+    cost_incomplete: bool | None = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

@@ -28,7 +28,7 @@ RUN: dict[str, Any] = {
     "error": None,
     "error_code": None,
     "error_message": None,
-    "cost": {"estimated": "0.004", "actual": None},
+    "cost": {"estimated": "0.004", "actual": None, "incomplete": False},
     "cache": {"hit": False, "cached_at": None},
     "replayed": False,
     "waiting_on": None,
