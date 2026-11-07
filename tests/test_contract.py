@@ -371,6 +371,7 @@ SHAPES: Final[dict[type, str]] = {
     slen.FlowExecutionNode: "FlowExecutionNode",
     slen.FlowExecutionEvent: "FlowExecutionEvent",
     slen.AttemptSummary: "AttemptSummary",
+    slen.AttemptCostBreakdown: "AttemptCostBreakdown",
     slen.Customer: "Customer",
     slen.CustomerAccount: "CustomerAccount",
     slen.CreditEntry: "CustomerCreditEntry",

@@ -9,7 +9,7 @@ answer = {
     "error": None,
     "error_code": None,
     "error_message": None,
-    "cost": {"estimated": "0.00412500", "actual": None},
+    "cost": {"estimated": "0.00412500", "actual": None, "incomplete": False},
     "cache": {"hit": False, "cached_at": None},
     "replayed": False,
     "waiting_on": None,

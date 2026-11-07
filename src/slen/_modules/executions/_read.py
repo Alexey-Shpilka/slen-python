@@ -1,6 +1,7 @@
 from slen._http._answer import Answered
 from slen._http._fields import Fields
 from slen._modules.executions._types import (
+    AttemptCostBreakdown,
     AttemptSummary,
     ExecutionCache,
     ExecutionCost,
@@ -14,7 +15,11 @@ from slen._modules.executions._types import (
 
 
 def cost_of(fields: Fields) -> ExecutionCost:
-    return ExecutionCost(estimated=fields.nullable_text("estimated"), actual=fields.nullable_text("actual"))
+    return ExecutionCost(
+        estimated=fields.nullable_text("estimated"),
+        actual=fields.nullable_text("actual"),
+        incomplete=fields.flag("incomplete"),
+    )
 
 
 def cache_of(fields: Fields) -> ExecutionCache:
@@ -63,6 +68,29 @@ def attempt_of(fields: Fields) -> AttemptSummary:
         cost=fields.optional_text("cost"),
         provider_request_id=fields.optional_text("provider_request_id"),
         model_code=fields.optional_text("model_code"),
+        input_tokens=fields.optional_integer("input_tokens"),
+        output_tokens=fields.optional_integer("output_tokens"),
+        cached_input_tokens=fields.optional_integer("cached_input_tokens"),
+        cache_write_tokens=fields.optional_integer("cache_write_tokens"),
+        cache_write_long_tokens=fields.optional_integer("cache_write_long_tokens"),
+        reasoning_tokens=fields.optional_integer("reasoning_tokens"),
+        tool_calls=fields.optional_counts("tool_calls"),
+        cost_breakdown=breakdown_of(fields.optional_nested("cost_breakdown")),
+        cost_incomplete=fields.optional_flag("cost_incomplete"),
+    )
+
+
+def breakdown_of(fields: Fields | None) -> AttemptCostBreakdown | None:
+    if fields is None:
+        return None
+
+    return AttemptCostBreakdown(
+        input=fields.text("input"),
+        cached_input=fields.text("cached_input"),
+        cache_write=fields.text("cache_write"),
+        output=fields.text("output"),
+        tools=fields.amounts("tools"),
+        total=fields.text("total"),
     )
 
 

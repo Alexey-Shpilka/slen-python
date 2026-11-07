@@ -45,6 +45,7 @@ from slen._modules.customers._types import (
 from slen._modules.executions._async import AsyncExecutions
 from slen._modules.executions._sync import Executions
 from slen._modules.executions._types import (
+    AttemptCostBreakdown,
     AttemptSummary,
     ExecutionCache,
     ExecutionCost,
@@ -92,6 +93,7 @@ __all__ = (
     "AsyncOperations",
     "AsyncPollErrorListener",
     "AsyncSlen",
+    "AttemptCostBreakdown",
     "AttemptSummary",
     "AuthenticationError",
     "BudgetExceededError",

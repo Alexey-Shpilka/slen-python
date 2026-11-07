@@ -158,6 +158,7 @@ def test_a_refusal_of_money_is_its_typed_error(kind: Kind) -> None:
         (data(run_result(execution_id=7)), "`data.execution_id`"),
         (data({k: v for k, v in run_result().items() if k != "trace_url"}), "`data.trace_url` is missing"),
         (data(run_result(cost=None)), "`data.cost`"),
+        (data(run_result(cost={"estimated": None, "actual": None})), "`data.cost.incomplete` is missing"),
         (data(run_result(output=[1])), "`data.output`"),
         ({"result": run_result()}, "no `data`"),
         (data(run_result(cache={"hit": False, "cached_at": "yesterday"})), "`data.cache.cached_at`"),
