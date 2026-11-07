@@ -188,6 +188,21 @@ def test_a_node_of_a_run_recorded_before_outputs_were_kept_reads_them_as_none(ki
     assert node.output_port == "success"
 
 
+def test_a_node_reads_its_estimate_and_once_its_hold_is_captured_its_fact(kind: Kind) -> None:
+    node = trace()["nodes"][0]
+    held = {**node, "node_key": "held", "cost": "0.00412500", "cost_status": "estimated", "cost_incomplete": False}
+    old = {key: value for key, value in node.items() if key not in ("estimated_cost", "cost_status", "cost_incomplete")}
+    fake = FakeTransport().push(200, data({**trace(), "nodes": [node, held, old]}))
+
+    nodes = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes
+
+    assert [(one.cost, one.estimated_cost, one.cost_status, one.cost_incomplete) for one in nodes] == [
+        ("0.00401000", "0.00412500", "actual", False),
+        ("0.00412500", "0.00412500", "estimated", False),
+        ("0.00401000", None, None, None),
+    ]
+
+
 def test_a_trace_whose_history_was_paused_says_so(kind: Kind) -> None:
     fake = FakeTransport().push(200, data({**trace(), "history_paused": True, "nodes": [], "events": []}))
 

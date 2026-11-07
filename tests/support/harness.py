@@ -149,6 +149,7 @@ def run_view(**changes: Any) -> dict[str, Any]:
         "cache": {"hit": False, "cached_at": None},
         "waiting_on": None,
         "trace_url": "/v1/executions/74438200973594700",
+        "warnings": [],
     }
 
     return {**view, **changes}
@@ -240,6 +241,7 @@ def trace(**changes: Any) -> dict[str, Any]:
         "started_at": "2026-10-17T12:00:00+00:00",
         "finished_at": "2026-10-17T12:00:02+00:00",
         "duration_ms": 2000,
+        "warnings": [],
         "nodes": [
             {
                 "node_key": "answer",
@@ -247,6 +249,9 @@ def trace(**changes: Any) -> dict[str, Any]:
                 "status": "completed",
                 "output_port": "out",
                 "cost": "0.00401000",
+                "estimated_cost": "0.00412500",
+                "cost_status": "actual",
+                "cost_incomplete": False,
                 "duration_ms": 1900,
                 "started_at": "2026-10-17T12:00:00+00:00",
                 "finished_at": "2026-10-17T12:00:02+00:00",

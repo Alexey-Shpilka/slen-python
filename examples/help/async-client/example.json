@@ -26,7 +26,8 @@
           "cache": { "hit": false, "cached_at": null },
           "replayed": false,
           "waiting_on": null,
-          "trace_url": "/v1/executions/74438200973594730"
+          "trace_url": "/v1/executions/74438200973594730",
+          "warnings": []
         }
       }
     },
@@ -51,7 +52,8 @@
           "cache": { "hit": false, "cached_at": null },
           "replayed": false,
           "waiting_on": null,
-          "trace_url": "/v1/executions/74438200973594731"
+          "trace_url": "/v1/executions/74438200973594731",
+          "warnings": []
         }
       }
     }

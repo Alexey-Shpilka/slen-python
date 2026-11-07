@@ -34,6 +34,7 @@ SURFACE: Final = frozenset(
         "ExecutionCost",
         "ExecutionCache",
         "ExecutionError",
+        "ExecutionWarning",
         "WaitingOn",
         "ExecutionTrace",
         "FlowExecutionNode",

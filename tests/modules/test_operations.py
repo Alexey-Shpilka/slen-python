@@ -103,6 +103,20 @@ def test_the_answer_is_read_into_its_type(kind: Kind) -> None:
     assert run.cost.estimated == "0.00412500"
     assert run.request_id == "req-1"
     assert str(run.status) == "rejected"
+    assert run.warnings == ()
+
+
+def test_the_warnings_of_a_run_are_read_as_the_api_sends_them(kind: Kind) -> None:
+    said = "The input carries keys of a model call that the flow does not pass to the model: tools, temperature."
+    warning = {"code": "input_key_ignored", "keys": ["tools", "temperature"], "message": said}
+    fake = FakeTransport().push(200, data(run_result(warnings=[warning, {"code": "later", "message": "Another."}])))
+
+    run: ExecutionResult = drive(kind, fake, execute())
+
+    assert [(one.code, one.keys, one.message) for one in run.warnings] == [
+        ("input_key_ignored", ("tools", "temperature"), said),
+        ("later", None, "Another."),
+    ]
 
 
 @pytest.mark.parametrize(
@@ -159,6 +173,11 @@ def test_a_refusal_of_money_is_its_typed_error(kind: Kind) -> None:
         (data({k: v for k, v in run_result().items() if k != "trace_url"}), "`data.trace_url` is missing"),
         (data(run_result(cost=None)), "`data.cost`"),
         (data(run_result(cost={"estimated": None, "actual": None})), "`data.cost.incomplete` is missing"),
+        (data({k: v for k, v in run_result().items() if k != "warnings"}), "`data.warnings` is missing"),
+        (
+            data(run_result(warnings=[{"code": "input_key_ignored", "keys": [1], "message": "."}])),
+            "`data.warnings[].keys`",
+        ),
         (data(run_result(output=[1])), "`data.output`"),
         ({"result": run_result()}, "no `data`"),
         (data(run_result(cache={"hit": False, "cached_at": "yesterday"})), "`data.cache.cached_at`"),

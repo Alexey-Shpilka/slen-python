@@ -1,6 +1,6 @@
 from slen._http._answer import Answered
 from slen._http._fields import Fields
-from slen._modules.executions._read import cache_of, cost_of, waiting_of
+from slen._modules.executions._read import cache_of, cost_of, waiting_of, warnings_of
 from slen._modules.executions._types import ExecutionError, ExecutionStatus
 from slen._modules.operations._types import ExecutionResult
 
@@ -28,6 +28,7 @@ def result_of(answered: Answered) -> ExecutionResult:
         replayed=run.flag("replayed"),
         waiting_on=waiting_of(run.nullable_nested("waiting_on")),
         trace_url=run.text("trace_url"),
+        warnings=warnings_of(run),
         retry_after_seconds=run.optional_integer("retry_after_seconds"),
         request_id=answered.request_id,
     )

@@ -60,6 +60,16 @@ class WaitingOn:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class ExecutionWarning:
+    """What a run said about its request when it started and went on with; code is left open, the backend adds them."""
+
+    code: str
+    # With input_key_ignored: the keys of a model call the input carried that no node of the flow reads.
+    keys: tuple[str, ...] | None
+    message: str
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class ExecutionStatusView:
     """The polling view of a run (GET /v1/executions/{id}/status); why it did not complete is error_code."""
 
@@ -73,6 +83,7 @@ class ExecutionStatusView:
     cache: ExecutionCache
     waiting_on: WaitingOn | None
     trace_url: str
+    warnings: tuple[ExecutionWarning, ...]
     retry_after_seconds: int | None = None
     request_id: str | None = field(default=None, compare=False)
 
@@ -139,6 +150,7 @@ class FlowExecutionNode:
     node_type: str
     status: str
     output_port: str | None
+    # The estimate until the node's hold is captured, then what the provider billed: cost_status says which.
     cost: str | None
     duration_ms: int | None
     started_at: datetime
@@ -156,6 +168,10 @@ class FlowExecutionNode:
     # Whether a model node's output is kept: "stored", "disabled_by_project", "withheld" (grounded with Google Search:
     # the rest is kept, its `content` is not) or "history_paused"; None for every other node and for older runs.
     output_stored: str | None = None
+    # The estimate the hold was taken on; "estimated" or "actual"; the fact misses something Slen cannot price yet.
+    estimated_cost: str | None = None
+    cost_status: str | None = None
+    cost_incomplete: bool | None = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -187,6 +203,7 @@ class ExecutionTrace:
     started_at: datetime
     finished_at: datetime | None
     duration_ms: int | None
+    warnings: tuple[ExecutionWarning, ...]
     nodes: tuple[FlowExecutionNode, ...]
     events: tuple[FlowExecutionEvent, ...]
     # The month's executions with history had run out: the run wrote no trace (None from a backend before 1.0.23).

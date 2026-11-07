@@ -367,6 +367,7 @@ SHAPES: Final[dict[type, str]] = {
     slen.ExecutionCost: "ExecutionCost",
     slen.ExecutionCache: "ExecutionCache",
     slen.WaitingOn: "WaitingOn",
+    slen.ExecutionWarning: "ExecutionWarnings[]",
     slen.ExecutionTrace: "FlowExecutionTrace",
     slen.FlowExecutionNode: "FlowExecutionNode",
     slen.FlowExecutionEvent: "FlowExecutionEvent",
@@ -407,7 +408,9 @@ def nullable(given: dict[str, Any]) -> bool:
 
 
 def divergences_of(kind: type, name: str) -> list[str]:
-    shape = resolved({"$ref": f"#/components/schemas/{name}"})
+    # "Name[]" is the item of the list schema Name.
+    shape = resolved({"$ref": f"#/components/schemas/{name.removesuffix('[]')}"})
+    shape = resolved(shape["items"]) if name.endswith("[]") else shape
     properties: dict[str, Any] = shape.get("properties", {})
     required = set(shape.get("required", []))
     hints = typing.get_type_hints(kind)
