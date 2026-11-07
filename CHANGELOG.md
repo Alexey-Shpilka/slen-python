@@ -7,6 +7,7 @@ All notable changes to `slen` are written here. The format follows [Keep a Chang
 ### Added
 - `ExecutionCost.incomplete`: `True` when a provider billed something Slen could not price for one of the run's calls — a usage field it does not know, a price tier, a cache write or a server tool without a price — and `actual` is then what Slen knew. Set together with `actual`; `False` until then. The API always sends it, and an answer without it is an `InvalidResponseError`; `ExecutionCost(…)` takes it as a keyword.
 - On `AttemptSummary`, the attempts of a trace node: `input_tokens` (the whole input, the cache read and writes included) and `output_tokens` (the whole paid output, reasoning included); `cached_input_tokens`, `cache_write_tokens`, `cache_write_long_tokens` and `reasoning_tokens`, the parts of those; `tool_calls`, the paid server-tool calls by name (`{"web_search": 6}`); `cost_breakdown`, an `AttemptCostBreakdown` — `input`, `cached_input`, `cache_write`, `output`, `tools` by name and `total`, decimal strings — `None` until the attempt is priced; `cost_incomplete`, the attempt's own `incomplete`. Each is `None` when the answer leaves it out, as the spec allows.
+- `pool_unavailable` (503) is in the contract copies, unmapped: a model node whose provider keys were all cooling down or refused. It leaves the node by its `unavailable` port; a run that ends on it carries it as its `error_code`, and as an HTTP error it falls back by status to `ProviderError`, like any 5xx without a row.
 
 ## [0.4.1] - 2026-11-02
 
