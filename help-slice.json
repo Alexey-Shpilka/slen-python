@@ -3296,6 +3296,33 @@
           "deprecated": false,
           "internal": false,
           "signature": "code: str | None"
+        },
+        {
+          "name": "output",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output: dict[str, Any] | None = None"
+        },
+        {
+          "name": "output_truncated",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output_truncated: bool | None = None"
+        },
+        {
+          "name": "output_stored",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "output_stored: str | None = None"
         }
       ]
     },

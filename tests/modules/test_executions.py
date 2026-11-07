@@ -156,6 +156,38 @@ def test_a_trace_without_the_fields_the_spec_leaves_out_reads_them_as_none(kind:
     assert found.history_paused is None
 
 
+def test_a_model_node_reads_the_answer_it_left_and_whether_it_was_kept(kind: Kind) -> None:
+    node = trace()["nodes"][0]
+    refused = {
+        **node,
+        "node_key": "answer_again",
+        "status": "failed",
+        "output_port": "unavailable",
+        "output": {"error": {"class": "unavailable", "code": "pool_unavailable", "http_status": 503}},
+        "output_truncated": True,
+    }
+    unkept = {**node, "node_key": "answer_quietly", "output": None, "output_stored": "disabled_by_project"}
+    fake = FakeTransport().push(200, data({**trace(), "nodes": [node, refused, unkept]}))
+
+    nodes = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes
+
+    assert nodes[0].output is not None
+    assert (nodes[0].output["content"], nodes[0].output_truncated, nodes[0].output_stored) == ("Hello", False, "stored")
+    assert nodes[1].output == {"error": {"class": "unavailable", "code": "pool_unavailable", "http_status": 503}}
+    assert nodes[1].output_truncated is True
+    assert (nodes[2].output, nodes[2].output_stored) == (None, "disabled_by_project")
+
+
+def test_a_node_of_a_run_recorded_before_outputs_were_kept_reads_them_as_none(kind: Kind) -> None:
+    old = {key: value for key, value in trace()["nodes"][0].items() if not key.startswith("output")}
+    fake = FakeTransport().push(200, data({**trace(), "nodes": [{**old, "output_port": "success"}]}))
+
+    node = drive(kind, fake, lambda slen: slen.executions.trace(RUN)).nodes[0]
+
+    assert (node.output, node.output_truncated, node.output_stored) == (None, None, None)
+    assert node.output_port == "success"
+
+
 def test_a_trace_whose_history_was_paused_says_so(kind: Kind) -> None:
     fake = FakeTransport().push(200, data({**trace(), "history_paused": True, "nodes": [], "events": []}))
 
