@@ -2549,6 +2549,15 @@
           "signature": "trace_url: str"
         },
         {
+          "name": "warnings",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "warnings: tuple[ExecutionWarning, ...]"
+        },
+        {
           "name": "retry_after_seconds",
           "kind": "field",
           "static": false,
@@ -2811,6 +2820,15 @@
           "signature": "trace_url: str"
         },
         {
+          "name": "warnings",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "warnings: tuple[ExecutionWarning, ...]"
+        },
+        {
           "name": "retry_after_seconds",
           "kind": "field",
           "static": false,
@@ -3010,6 +3028,15 @@
           "signature": "duration_ms: int | None"
         },
         {
+          "name": "warnings",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "warnings: tuple[ExecutionWarning, ...]"
+        },
+        {
           "name": "nodes",
           "kind": "field",
           "static": false,
@@ -3044,6 +3071,52 @@
           "deprecated": false,
           "internal": false,
           "signature": "request_id: str | None = None"
+        }
+      ]
+    },
+    {
+      "name": "ExecutionWarning",
+      "module": "slen",
+      "kind": "class",
+      "source": "src/slen/_modules/executions/_types.py",
+      "deprecated": false,
+      "internal": false,
+      "alias_of": null,
+      "modifiers": [
+        "dataclass",
+        "frozen"
+      ],
+      "type_parameters": [],
+      "extends": [],
+      "implements": [],
+      "signature": null,
+      "members": [
+        {
+          "name": "code",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "code: str"
+        },
+        {
+          "name": "keys",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "keys: tuple[str, ...] | None"
+        },
+        {
+          "name": "message",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "message: str"
         }
       ]
     },
@@ -3323,6 +3396,33 @@
           "deprecated": false,
           "internal": false,
           "signature": "output_stored: str | None = None"
+        },
+        {
+          "name": "estimated_cost",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "estimated_cost: str | None = None"
+        },
+        {
+          "name": "cost_status",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost_status: str | None = None"
+        },
+        {
+          "name": "cost_incomplete",
+          "kind": "field",
+          "static": false,
+          "optional": false,
+          "deprecated": false,
+          "internal": false,
+          "signature": "cost_incomplete: bool | None = None"
         }
       ]
     },

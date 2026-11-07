@@ -6,6 +6,7 @@ from slen._modules.executions._types import (
     ExecutionCost,
     ExecutionError,
     ExecutionStatus,
+    ExecutionWarning,
     WaitingOn,
 )
 
@@ -26,6 +27,7 @@ class ExecutionResult:
     replayed: bool
     waiting_on: WaitingOn | None
     trace_url: str
+    warnings: tuple[ExecutionWarning, ...]
     retry_after_seconds: int | None = None
     request_id: str | None = field(default=None, compare=False)
 

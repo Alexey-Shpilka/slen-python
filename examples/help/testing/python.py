@@ -1,7 +1,7 @@
 # docs:start double
 from slen.testing import FakeTransport
 
-answer = {
+answer: dict[str, object] = {
     "execution_id": "74438200973594700",
     "status": "completed",
     "operation": "generate_email",
@@ -14,6 +14,7 @@ answer = {
     "replayed": False,
     "waiting_on": None,
     "trace_url": "/v1/executions/74438200973594700",
+    "warnings": [],
 }
 
 http = FakeTransport().push(200, {"data": answer})

@@ -8,6 +8,7 @@ from slen._modules.executions._types import (
     ExecutionStatus,
     ExecutionStatusView,
     ExecutionTrace,
+    ExecutionWarning,
     FlowExecutionEvent,
     FlowExecutionNode,
     WaitingOn,
@@ -24,6 +25,13 @@ def cost_of(fields: Fields) -> ExecutionCost:
 
 def cache_of(fields: Fields) -> ExecutionCache:
     return ExecutionCache(hit=fields.flag("hit"), cached_at=fields.nullable_moment("cached_at"))
+
+
+def warnings_of(run: Fields) -> tuple[ExecutionWarning, ...]:
+    return tuple(
+        ExecutionWarning(code=row.text("code"), keys=row.optional_texts("keys"), message=row.text("message"))
+        for row in run.rows("warnings")
+    )
 
 
 def waiting_of(fields: Fields | None) -> WaitingOn | None:
@@ -51,6 +59,7 @@ def status_view_of(answered: Answered) -> ExecutionStatusView:
         cache=cache_of(run.nested("cache")),
         waiting_on=waiting_of(run.nullable_nested("waiting_on")),
         trace_url=run.text("trace_url"),
+        warnings=warnings_of(run),
         retry_after_seconds=run.optional_integer("retry_after_seconds"),
         request_id=answered.request_id,
     )
@@ -112,6 +121,9 @@ def node_of(fields: Fields) -> FlowExecutionNode:
         output=fields.optional_json("output"),
         output_truncated=fields.optional_flag("output_truncated"),
         output_stored=fields.optional_text("output_stored"),
+        estimated_cost=fields.optional_text("estimated_cost"),
+        cost_status=fields.optional_text("cost_status"),
+        cost_incomplete=fields.optional_flag("cost_incomplete"),
     )
 
 
@@ -143,6 +155,7 @@ def trace_of(answered: Answered) -> ExecutionTrace:
         started_at=run.moment("started_at"),
         finished_at=run.optional_moment("finished_at"),
         duration_ms=run.optional_integer("duration_ms"),
+        warnings=warnings_of(run),
         nodes=tuple(node_of(row) for row in run.rows("nodes")),
         events=tuple(event_of(row) for row in run.rows("events")),
         history_paused=run.optional_flag("history_paused"),

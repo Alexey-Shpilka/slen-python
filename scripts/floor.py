@@ -33,6 +33,7 @@ RUN: dict[str, Any] = {
     "replayed": False,
     "waiting_on": None,
     "trace_url": "/v1/executions/74438200973594700",
+    "warnings": [],
 }
 ACCOUNT: dict[str, Any] = {
     "customer_account_id": "1",

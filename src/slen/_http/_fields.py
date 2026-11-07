@@ -89,6 +89,19 @@ class Fields:
 
         return {key: inner._typed(key, "required", kind) for key in value}
 
+    def optional_texts(self, name: str) -> tuple[str, ...] | None:
+        value = self._typed(name, "optional", list)
+
+        if value is None:
+            return None
+
+        items = cast("list[object]", value)
+
+        if not all(isinstance(item, str) for item in items):
+            raise WireError(f"`{self._where}.{name}` is not a list of strings")
+
+        return tuple(cast("list[str]", items))
+
     def moment(self, name: str) -> datetime:
         return cast("datetime", self._moment(name, "required"))
 
