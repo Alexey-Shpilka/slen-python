@@ -3,7 +3,7 @@
   "language": "python",
   "package": {
     "name": "slen",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "manifest": "pyproject.toml",
     "runtime": {
       "name": "python",
@@ -4808,7 +4808,7 @@
       "type_parameters": [],
       "extends": [],
       "implements": [],
-      "signature": "__version__ = '0.5.0'",
+      "signature": "__version__ = '0.5.1'",
       "members": []
     },
     {
