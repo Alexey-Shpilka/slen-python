@@ -249,7 +249,7 @@ Every failure is a `SlenError` with `code`, `status`, `details`, `request_id` (w
 | Error | Codes | Fallback |
 |---|---|---|
 | `AuthenticationError` | `invalid_api_key`, `insufficient_scope`, `not_authenticated`, `not_a_member`, `account_suspended` | any other 401 / 403 |
-| `PolicyDeniedError` | `policy_denied`, `model_not_allowed` | |
+| `PolicyDeniedError` | `policy_denied`, `model_not_allowed`, `model_retired` | |
 | `CustomerBlockedError` (a `PolicyDeniedError`) | `customer_blocked` | |
 | `SpendRefusedError` (the family below) | `budget_exceeded`, `operation_limit_exceeded`, `concurrency_limit_exceeded`, `insufficient_credits`, `overrun_stopped`, `overrun_approval_required` | any other 402 |
 | `RateLimitError` | `rate_limit_exceeded` | any other 429 |

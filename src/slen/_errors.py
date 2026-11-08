@@ -106,7 +106,7 @@ class RateLimitError(SlenError):
 
 
 class PolicyDeniedError(SlenError):
-    """A policy of the project refused the run."""
+    """A policy of the project refused the run, or its model may not be called (model_not_allowed, model_retired)."""
 
 
 class CustomerBlockedError(PolicyDeniedError):
