@@ -3632,7 +3632,7 @@
       "type_parameters": [],
       "extends": [],
       "implements": [],
-      "signature": "LOG_EVENTS = ('slen.request', 'slen.response', 'slen.retry', 'slen.refused', 'slen.unauthorized', 'slen.failed', 'slen.wait.poll', 'slen.wait.poll_failed', 'slen.webhook.rejected')",
+      "signature": "LOG_EVENTS = ('slen.request', 'slen.response', 'slen.retry', 'slen.refused', 'slen.unauthorized', 'slen.failed', 'slen.wait.poll', 'slen.wait.poll_failed', 'slen.execution.warnings', 'slen.webhook.rejected')",
       "members": []
     },
     {

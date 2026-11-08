@@ -16,6 +16,7 @@ LOG_EVENTS: Final[tuple[str, ...]] = (
     "slen.failed",
     "slen.wait.poll",
     "slen.wait.poll_failed",
+    "slen.execution.warnings",
     "slen.webhook.rejected",
 )
 
@@ -29,6 +30,7 @@ LEVELS: Final[Mapping[str, str]] = MappingProxyType(
         "slen.failed": "error",
         "slen.wait.poll": "debug",
         "slen.wait.poll_failed": "warning",
+        "slen.execution.warnings": "warning",
         "slen.webhook.rejected": "warning",
     }
 )

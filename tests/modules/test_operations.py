@@ -13,7 +13,7 @@ from slen import (
     __version__,
 )
 from slen.testing import FakeTransport, MemorySpanRecorder
-from support.harness import BASE, Kind, data, drive, raised, run_result
+from support.harness import BASE, Entry, Kind, RecordingLogger, data, drive, raised, run_result
 
 INPUT = {"messages": [{"role": "user", "content": "Where is my order?"}]}
 
@@ -73,6 +73,26 @@ def test_execute_async_asks_for_a_worker(kind: Kind) -> None:
     assert run.status is ExecutionStatus.QUEUED
     assert run.retry_after_seconds == 2
     assert run.is_pending()
+
+
+def test_a_run_that_says_something_about_its_request_writes_one_warning_with_its_codes_and_keys(kind: Kind) -> None:
+    warnings = [
+        {"code": "input_key_ignored", "keys": ["tools", "temperature"], "message": "planted: tools, temperature."},
+        {"code": "later", "message": "planted: another."},
+    ]
+    queued = run_result(status="queued", output=None, retry_after_seconds=2, warnings=warnings)
+    fake = FakeTransport().push(200, data(run_result(warnings=warnings))).push(202, data(queued))
+    fake.push(200, data(run_result()))
+    logger = RecordingLogger()
+
+    drive(kind, fake, lambda slen: slen.operations.execute("support.answer", INPUT), logger=logger)
+    drive(kind, fake, lambda slen: slen.operations.execute_async("support.answer", INPUT), logger=logger)
+    drive(kind, fake, lambda slen: slen.operations.execute("support.answer", INPUT), logger=logger)
+    said = [{"code": "input_key_ignored", "keys": ["tools", "temperature"]}, {"code": "later", "keys": None}]
+    line = Entry("warning", "slen.execution.warnings", {"execution_id": "74438200973594700", "warnings": said})
+
+    assert [entry for entry in logger.entries if entry.event == "slen.execution.warnings"] == [line, line]
+    assert "planted" not in repr(logger.entries)
 
 
 def test_the_answer_is_read_into_its_type(kind: Kind) -> None:

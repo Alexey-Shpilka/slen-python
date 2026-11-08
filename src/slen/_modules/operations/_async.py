@@ -3,6 +3,7 @@ from typing import Any
 
 from slen._http._request import Sending, refuse_before_the_wire
 from slen._modules._context import AsyncContext
+from slen._modules.executions._journal import log_warnings
 from slen._modules.operations._calls import ContextValue, RunOrder, run_call, span_subject
 from slen._modules.operations._types import ExecutionResult
 from slen._observability._scope import SpanScope
@@ -84,5 +85,6 @@ class AsyncOperations:
             raise
 
         scope.execution(run)
+        log_warnings(self._context.transport.config.logger, run.execution_id, run.warnings)
 
         return run
