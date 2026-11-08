@@ -19,7 +19,7 @@ from slen import (
 )
 from slen._http import _clock
 from slen.testing import FakeTransport, MemorySpanRecorder
-from support.harness import BASE, KEY, FakeClock, Kind, data, drive, raised, run_view, trace
+from support.harness import BASE, KEY, Entry, FakeClock, Kind, RecordingLogger, data, drive, raised, run_view, trace
 
 RUN = "74438200973594700"
 ATTEMPT_PARTS = (
@@ -210,6 +210,25 @@ def test_a_trace_whose_history_was_paused_says_so(kind: Kind) -> None:
 
     assert found.history_paused is True
     assert (found.nodes, found.events) == ((), ())
+
+
+def test_each_read_of_a_run_that_says_something_writes_one_warning_a_wait_one_for_its_last_state(kind: Kind) -> None:
+    warnings = [{"code": "input_key_ignored", "keys": ["tools"], "message": "planted: the input carries tools."}]
+    fake = FakeTransport().push(200, data(run_view(warnings=warnings))).push(200, data(trace(warnings=warnings)))
+    fake.push(200, data(run_view(status="running", output=None, retry_after_seconds=1, warnings=warnings)))
+    fake.push(200, data(run_view(warnings=warnings))).push(200, data(run_view()))
+    logger = RecordingLogger()
+
+    drive(kind, fake, lambda slen: slen.executions.get(RUN), logger=logger)
+    drive(kind, fake, lambda slen: slen.executions.trace(RUN), logger=logger)
+    drive(kind, fake, lambda slen: slen.executions.wait(RUN, timeout_seconds=60), logger=logger)
+    drive(kind, fake, lambda slen: slen.executions.get(RUN), logger=logger)
+    said = {"execution_id": RUN, "warnings": [{"code": "input_key_ignored", "keys": ["tools"]}]}
+    line = Entry("warning", "slen.execution.warnings", said)
+
+    assert len(fake.requests) == 5
+    assert [entry for entry in logger.entries if entry.event == "slen.execution.warnings"] == [line, line, line]
+    assert "planted" not in repr(logger.entries)
 
 
 def test_wait_reads_at_the_pace_it_doubles_until_the_run_is_over(kind: Kind, clock: FakeClock) -> None:

@@ -2,6 +2,7 @@ from slen._errors import SlenError
 from slen._http._request import Sending
 from slen._modules._context import SyncContext
 from slen._modules.executions._calls import status_call, trace_call
+from slen._modules.executions._journal import log_warnings
 from slen._modules.executions._types import ExecutionStatusView, ExecutionTrace
 from slen._modules.executions._wait import PollErrorListener, Waiting, WaitOrder, check_wait
 from slen._observability._scope import SpanScope, SpanSubject
@@ -23,8 +24,10 @@ class Executions:
     ) -> ExecutionStatusView:
         """The polling view of one run, read once; writes no span."""
         sending = Sending(timeout=timeout, retries=retries, request_id=request_id)
+        run = self._context.transport.call(status_call(execution_id, sending))
+        log_warnings(self._context.transport.config.logger, run.execution_id, run.warnings)
 
-        return self._context.transport.call(status_call(execution_id, sending))
+        return run
 
     def wait(
         self,
@@ -49,6 +52,8 @@ class Executions:
             raise
 
         scope.execution(run)
+        # One record for the state the wait answers with, none for the reads before it.
+        log_warnings(transport.config.logger, run.execution_id, run.warnings)
 
         return run
 
@@ -62,8 +67,10 @@ class Executions:
     ) -> ExecutionTrace:
         """The trace of one run: every node, event and provider attempt."""
         sending = Sending(timeout=timeout, retries=retries, request_id=request_id)
+        found = self._context.transport.call(trace_call(execution_id, sending))
+        log_warnings(self._context.transport.config.logger, found.execution_id, found.warnings)
 
-        return self._context.transport.call(trace_call(execution_id, sending))
+        return found
 
     def _poll(self, waiting: Waiting, listener: PollErrorListener | None) -> ExecutionStatusView:
         transport = self._context.transport

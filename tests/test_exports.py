@@ -134,5 +134,6 @@ def test_the_events_of_the_journal_are_the_contracts() -> None:
         "slen.failed",
         "slen.wait.poll",
         "slen.wait.poll_failed",
+        "slen.execution.warnings",
         "slen.webhook.rejected",
     )
