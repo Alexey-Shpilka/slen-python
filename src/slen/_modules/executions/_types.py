@@ -52,10 +52,14 @@ class ExecutionError:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class WaitingOn:
-    """What a waiting or queued run waits on: a queue node, an approval, a rate-limit queue, a background job."""
+    """What a waiting run waits on: a queue node, an approval, a background job, a slot of a Queue node's limit."""
 
     node_key: str
+    # queue_node, approval, provider_background, queue_slot (a slot of a Queue node's limit of calls at once; the run
+    # goes on by itself when one is freed) or rate_limit_queue; left open, the backend adds them.
     type: str
+    # When it is picked up again, when that is known; for queue_slot the deadline, when a run still without a slot
+    # leaves by the node's busy port.
     resume_at: datetime | None
 
 

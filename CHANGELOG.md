@@ -4,6 +4,14 @@ All notable changes to `slen` are written here. The format follows [Keep a Chang
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-11-09
+
+### Added
+- `queue_slot`, a value of `WaitingOn.type`: the run waits for a slot of a Queue node's limit of calls at once. `execute()` answers such a run at once — `status` `waiting`, `retry_after_seconds` 2 — and the run goes on by itself when a slot is freed; `wait()` follows it as it follows any other wait. `resume_at` is the deadline: a run still without a slot then leaves by the node's `busy` port, and with nothing connected there it ends `rejected` with `error_code` `concurrency_limit_exceeded`. `type` stays a `str`; its comment names the value, and the README shows the wait.
+
+### Changed
+- `ConcurrencyLimitError` (`concurrency_limit_exceeded`, 402) is the refusal of a flow's Queue node whose limit of calls at once is full and whose `busy` port leads nowhere — no longer of a `concurrency` budget, a type the API no longer creates. Its `details` are the node's `busy` output: `reason` (`timeout`, `refused`, `queue_full`), `key`, `limit`, `in_flight`, `waiting`, `waited_seconds`. The docstring says so; the class and the code it maps are as they were.
+
 ## [0.5.0] - 2026-11-08
 
 ### Changed
@@ -28,7 +36,8 @@ All notable changes to `slen` are written here. The format follows [Keep a Chang
 ### Added
 - The first release of the Python SDK — the surface of the PHP and TypeScript SDKs 0.4.0: `Slen` and `AsyncSlen`, runs and their wait, end customers, their credits and statements page after page, webhooks, the journal on the standard library's `logging`, spans and an OpenTelemetry bridge (`slen[otel]`), and `slen.testing` for your own tests.
 
-[Unreleased]: https://github.com/Alexey-Shpilka/slen-python/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/Alexey-Shpilka/slen-python/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/Alexey-Shpilka/slen-python/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/Alexey-Shpilka/slen-python/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/Alexey-Shpilka/slen-python/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Alexey-Shpilka/slen-python/releases/tag/v0.4.0

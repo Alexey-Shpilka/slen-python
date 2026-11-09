@@ -90,7 +90,9 @@ class OperationLimitExceededError(SpendRefusedError):
 
 
 class ConcurrencyLimitError(SpendRefusedError):
-    """A concurrency budget has every slot taken; passes when one is freed."""
+    """A Queue node's limit of calls at once was full and its busy port leads nowhere; details is that port's output."""
+
+    # The keys of details: reason (timeout, refused or queue_full), key, limit, in_flight, waiting, waited_seconds.
 
 
 class CustomerNotFoundError(SlenError):
